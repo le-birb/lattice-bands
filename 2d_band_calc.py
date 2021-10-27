@@ -52,6 +52,13 @@ g_y = range(-g_range, g_range + 1)
 
 g_offsets = product(g_x, g_y)
 
+# TODO: keep track of degenerate bands
+# current idea: hold a set of start and end points for each band
+# that's been plotted, and compare each new start/end point
+# to the set
+# to consider:
+#  - might run into trouble around different path sections having
+#    the same start/end point
 for offset in g_offsets:
     pi_x_energies = energy(pi_x_kx + offset[0]*b[0], pi_x_ky + offset[1]*b[1])
     x_m_energies = energy(x_m_kx + offset[0]*b[0], x_m_ky + offset[1]*b[1])
