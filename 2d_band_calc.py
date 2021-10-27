@@ -42,6 +42,10 @@ m_pi_plot_range = np.linspace(4, 6)
 fig = p.figure()
 ax  = fig.add_subplot()
 
+# add lines to separate the paths and make reading the plot easier
+for point in [0, 2, 4, 6]:
+    p.axvline(point, linestyle = "--", color = (0, 0, 0, .5))
+
 # define the g offsets to iterate over
 g_x = range(-g_range, g_range + 1)
 g_y = range(-g_range, g_range + 1)
