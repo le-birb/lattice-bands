@@ -63,6 +63,6 @@ for offset in g_offsets:
 
 ax.set_xlabel("High Symmetry Points")
 ax.set_xticks([0, 1, 2, 3, 4, 5, 6])
-ax.set_xticklabels([r"$\Pi$", r"$\Delta$", r"X", r"Z", r"M", r"$\Sigma$"])
+ax.set_xticklabels([r"$\Pi$", r"$\Delta$", r"X", r"Z", r"M", r"$\Sigma$", r"$\Pi$"])
 ax.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
 p.show()
