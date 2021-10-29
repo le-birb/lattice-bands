@@ -61,13 +61,6 @@ seen_gamma_x_endpoints: set = set()
 seen_x_m_endpoints: set = set()
 seen_m_gamma_endpoints: set = set()
 
-# TODO: keep track of degenerate bands
-# current idea: hold a set of start and end points for each band
-# that's been plotted, and compare each new start/end point
-# to the set
-# to consider:
-#  - might run into trouble around different path sections having
-#    the same start/end point
 for offset in g_offsets:
     gamma_color_idx = 0
     x_color_idx = 0
