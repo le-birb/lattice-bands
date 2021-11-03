@@ -53,18 +53,19 @@ g_y = range(-g_range, g_range + 1)
 g_offsets = product(g_x, g_y)
 
 
-seen_gamma_x_endpoints: set = {}
-seen_x_m_endpoints: set = {}
-seen_m_gamma_endpoints: set = {}
+# TODO: make sure there's a handler for if this ever runs out
+# if that situation is hit, come up with a better solution
+degeneracy_colors = ["black", "red", "blue", "green", "purple"]
 
-# TODO: keep track of degenerate bands
-# current idea: hold a set of start and end points for each band
-# that's been plotted, and compare each new start/end point
-# to the set
-# to consider:
-#  - might run into trouble around different path sections having
-#    the same start/end point
+seen_gamma_x_endpoints: set = set()
+seen_x_m_endpoints: set = set()
+seen_m_gamma_endpoints: set = set()
+
 for offset in g_offsets:
+    gamma_color_idx = 0
+    x_color_idx = 0
+    m_color_idx = 0
+
     gamma_x_energies = energy(gamma_x_kx + offset[0]*b[0], gamma_x_ky + offset[1]*b[1])
     x_m_energies = energy(x_m_kx + offset[0]*b[0], x_m_ky + offset[1]*b[1])
     m_gamma_energies = energy(m_gamma_kx + offset[0]*b[0], m_gamma_ky + offset[1]*b[1])
@@ -75,19 +76,23 @@ for offset in g_offsets:
     m_gamma_endpoints = (m_gamma_energies[0], m_gamma_energies[-1])
 
     if gamma_x_endpoints in seen_gamma_x_endpoints:
-        # degeneracy detected
-        # deus vult
-        pass
+        gamma_color_idx += 1
+    else:
+        seen_gamma_x_endpoints.add(gamma_x_endpoints)
 
     if x_m_endpoints in seen_x_m_endpoints:
-        pass
+        x_color_idx += 1
+    else:
+        seen_x_m_endpoints.add(x_m_endpoints)
 
     if m_gamma_endpoints in seen_m_gamma_endpoints:
-        pass
+        m_color_idx += 1
+    else:
+        seen_m_gamma_endpoints.add(m_gamma_endpoints)
 
-    ax.plot(gamma_x_plot_range, gamma_x_energies)
-    ax.plot(x_m_plot_range, x_m_energies)
-    ax.plot(m_gamma_plot_range, m_gamma_energies)
+    ax.plot(gamma_x_plot_range, gamma_x_energies, color = degeneracy_colors[gamma_color_idx])
+    ax.plot(x_m_plot_range, x_m_energies, color = degeneracy_colors[x_color_idx])
+    ax.plot(m_gamma_plot_range, m_gamma_energies, color = degeneracy_colors[m_color_idx])
 
 ax.set_xlabel("High Symmetry Points")
 ax.set_xticks([0, 1, 2, 3, 4, 5, 6])
