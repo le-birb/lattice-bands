@@ -67,12 +67,10 @@ point_names = \
 
 resolution = 50
 
-path = np.array()
+paths = []
 
 for start, end in pairwise(points):
-    path.append(np.linspace(start, end, num = resolution, endpoint = False))
-
-path.append(np.array(end))
+    paths.append(np.linspace(start, end, num = resolution))
 
 plot_range = np.linspace(0, len(points)-1, num = resolution * (len(points)-1))
 
