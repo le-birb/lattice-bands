@@ -7,8 +7,10 @@ from math import pi, sqrt
 from itertools import product
 
 
-def energy(position) -> float:
-    return np.dot(position, position)
+def energy(positions):
+    "Takes a list of vector positions and returns a list of energies"
+    # squares each element of each vector, then sums the terms of each vector
+    return (positions**2).sum(1)
 
 def triple_product(a, b, c) -> float:
     return np.dot(a, np.cross(b, c))
