@@ -20,7 +20,7 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-g_range = 1
+reciprocal_range = 1
 
 a = 1
 direct_basis = \
