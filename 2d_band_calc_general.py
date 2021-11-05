@@ -67,12 +67,56 @@ point_names = \
     "$\Gamma$"
 ]
 
+boundary_points = [0, 2, 3, 5]
+
 resolution = 50
 
 paths = []
+plot_ranges = []
+curr_range_start = 0
+seen_endpoints: list[set] = []
 
 for start, end in pairwise(points):
     paths.append(np.linspace(start, end, num = resolution))
+    plot_ranges.append(np.linspace(curr_range_start, curr_range_start + 1, num = resolution))
+    curr_range_start += 1
+    seen_endpoints.append({})
 
-plot_range = np.linspace(0, len(points)-1, num = resolution * (len(points)-1))
+g_range = range(-reciprocal_range, reciprocal_range + 1)
+# here is the second place to ignore the third dimension
+g_offsets = tuple(product(g_range, g_range, (0,)))
 
+# TODO: make sure there's a handler for if this ever runs out
+# if that situation is hit, come up with a better solution
+degeneracy_colors = ["black", "red", "orange", "yellow", "green", "blue", "purple"]
+
+fig = p.figure()
+ax  = fig.add_subplot()
+
+for point in boundary_points:
+    p.axvline(point, linestyle = "--", color = (0, 0, 0, .5))
+
+for i in range(len(paths)):
+    path = paths[i]
+    plot_range = plot_ranges[i]
+    degeneracies = seen_endpoints[i]
+
+    for offset in g_offsets:
+        actual_k = (offset*reciprocal_basis).sum(0)
+        energies = energy(path + actual_k)
+        endpoints = (energies[0], energies[-1])
+
+        # degeneracy is checked for at the endpoints of bands, since there is only one
+        # possible path between 2 endpoints
+        if endpoints in degeneracies:
+            degeneracies[endpoints] += 1
+        else:
+            degeneracies[endpoints] = 0
+
+        ax.plot(plot_range, energies, color = degeneracy_colors[degeneracies[endpoints]])
+
+ax.set_xlabel("High Symmetry Points")
+ax.set_xticks(list(range(len(points))))
+ax.set_xticklabels(point_names)
+ax.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
+p.show()
