@@ -1,4 +1,6 @@
 
+from __future__ import annotations
+
 import itertools
 import numpy as np
 import matplotlib.pyplot as p
@@ -29,7 +31,8 @@ direct_basis = \
 np.array([   # these basis vectors are hard-coded for a hexagonal lattice
     # they are 3-d but the 3rd dimension will be ignored later
     [a, 0, 0],
-    [a/2, sqrt(3)/2 * a, 0],
+    # [a/2, sqrt(3)/2 * a, 0],
+    [0, a, 0],
     [0, 0, 1] # as the lattice is 2d right now, the height doesn't matter
 ])
 # common symbols for the vectors, for brevity
@@ -47,14 +50,25 @@ np.array([
 b1, b2, b3 = reciprocal_basis
 
 # here's where the third dimension is ignored
+# points = \
+# [
+#     (0,0,0),
+#     (2*pi/(3*a), 0, 0),
+#     (4*pi/(3*a), 0, 0),
+#     (pi/a, pi/(sqrt(3)*a), 0),
+#     (pi/(2*a), pi/(sqrt(3)*2*a), 0),
+#     (0, 0, 0)
+# ]
+
 points = \
 [
     (0,0,0),
-    (2*pi/(3*a), 0, 0),
-    (4*pi/(3*a), 0, 0),
-    (pi/a, pi/(sqrt(3)*a), 0),
-    (pi/(2*a), pi/(sqrt(3)*2*a), 0),
-    (0, 0, 0)
+    (pi/(2*a), 0,0),
+    (pi/a, 0, 0),
+    (pi/a, pi/(2*a), 0),
+    (pi/a, pi/a, 0),
+    (pi/(2*a), pi/(2*a), 0),
+    (0,0,0)
 ]
 
 point_names = \
@@ -64,7 +78,8 @@ point_names = \
     "K",
     "M",
     "$\Sigma$",
-    "$\Gamma$"
+    "$\Gamma$",
+    "a"
 ]
 
 boundary_points = [0, 2, 3, 5]
