@@ -8,7 +8,7 @@ import matplotlib.pyplot as p
 
 from math import pi, sqrt, isclose
 from itertools import product, zip_longest
-
+import json
 
 class degeneracy_tracker(defaultdict):
     __sentinel = object()
@@ -65,20 +65,11 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-reciprocal_range = 1
+with open("lattices/2d_hexagonal.json", "r") as f:
+    lattice_data: dict = json.load(f)
 
-a = 1
-direct_basis = \
-np.array([   # these basis vectors are hard-coded for a hexagonal lattice
-    # they are 3-d but the 3rd dimension will be ignored later
-    [a, 0, 0],
-    [a/2, sqrt(3)/2 * a, 0],
-    # [0, a, 0],
-    [0, 0, 1] # as the lattice is 2d right now, the height doesn't matter
-])
-# common symbols for the vectors, for brevity
+direct_basis = np.array(lattice_data["basis"])
 a1, a2, a3 = direct_basis
-
 direct_triple = triple_product(*direct_basis)
 
 reciprocal_basis = 2*pi* \
@@ -87,53 +78,13 @@ np.array([
     np.cross(a3, a1)/direct_triple,
     np.cross(a1, a2)/direct_triple
 ])
-
 b1, b2, b3 = reciprocal_basis
 
-# here's where the third dimension is ignored
-points = \
-[
-    (0,0,0),
-    (2*pi/(3*a), 0, 0),
-    (4*pi/(3*a), 0, 0),
-    (pi/a, pi/(sqrt(3)*a), 0),
-    (pi/(2*a), pi/(sqrt(3)*2*a), 0),
-    (0, 0, 0)
-]
+points = lattice_data["points"]
+point_names = lattice_data["point_names"]
+line_points = lattice_data["line_points"]
 
-# points = \
-# [
-#     (0,0,0),
-#     (pi/(2*a), 0,0),
-#     (pi/a, 0, 0),
-#     (pi/a, pi/(2*a), 0),
-#     (pi/a, pi/a, 0),
-#     (pi/(2*a), pi/(2*a), 0),
-#     (0,0,0)
-# ]
-
-point_names = \
-[
-    "$\Gamma$",
-    "T",
-    "K",
-    "M",
-    "$\Sigma$",
-    "$\Gamma$"
-]
-
-# point_names = \
-# [
-#     "$\Gamma$", 
-#     "$\Delta$", 
-#     "X", 
-#     "Z", 
-#     "M", 
-#     "$\Sigma$", 
-#     "$\Gamma$"
-# ]
-
-line_points = [0, 2, 3, 5]
+reciprocal_range = 1
 
 resolution = 50
 
