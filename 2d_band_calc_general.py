@@ -110,7 +110,7 @@ point_names = \
 #     "$\Gamma$"
 # ]
 
-boundary_points = [0, 2, 3, 5]
+line_points = [0, 2, 3, 5]
 
 resolution = 50
 
@@ -143,7 +143,7 @@ degeneracy_colors = [None, "black", "red", "orange", "yellow", "green", "blue", 
 fig = p.figure()
 ax  = fig.add_subplot()
 
-for point in boundary_points:
+for point in line_points:
     p.axvline(point, linestyle = "--", color = (0, 0, 0, .5))
 
 for i in range(len(paths)):
