@@ -1,13 +1,31 @@
 
 from __future__ import annotations
+from collections import defaultdict
 
 import itertools
 import numpy as np
 import matplotlib.pyplot as p
 
-from math import pi, sqrt
-from itertools import product
+from math import pi, sqrt, isclose
+from itertools import product, zip_longest
 
+
+class degeneracy_tracker(defaultdict):
+    __sentinel = object()
+
+    def __init__(self):
+        super().__init__(lambda : 0)
+
+    def __contains__(self, other: object) -> bool:
+        if isinstance(other, tuple):
+            return any(
+                all(
+                    isclose(a, b) for a, b in zip_longest(member, other, fillvalue = self.__sentinel)
+                )
+                for member in self
+            )
+        else:
+            return super().__contains__(other)
 
 def energy(positions):
     "Takes a list of vector positions and returns a list of energies"
@@ -99,13 +117,13 @@ resolution = 50
 paths = []
 plot_ranges = []
 curr_range_start = 0
-seen_endpoints: list[set] = []
+seen_endpoints: list[degeneracy_tracker] = []
 
 for start, end in pairwise(points):
     paths.append(np.linspace(start, end, num = resolution))
     plot_ranges.append(np.linspace(curr_range_start, curr_range_start + 1, num = resolution))
     curr_range_start += 1
-    seen_endpoints.append({})
+    seen_endpoints.append(degeneracy_tracker())
 
 g_range = range(-reciprocal_range, reciprocal_range + 1)
 # here is the second place to ignore the third dimension
