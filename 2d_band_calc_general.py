@@ -6,7 +6,7 @@ import itertools
 import numpy as np
 import matplotlib.pyplot as p
 
-from math import pi, sqrt, isclose
+from math import pi, isclose
 from itertools import product, zip_longest
 import json
 
