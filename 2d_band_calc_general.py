@@ -125,6 +125,9 @@ for start, end in pairwise(points):
     curr_range_start += 1
     seen_endpoints.append(degeneracy_tracker())
 
+# TODO: rework this to visit only nth nearest-neighbors instead of
+# all the points within n reciprocal basis vectors away in each direction
+# this will help make sure that degeneracy is consistent
 g_range = range(-reciprocal_range, reciprocal_range + 1)
 # here is the second place to ignore the third dimension
 g_offsets = set(product(g_range, g_range, (0,)))
@@ -133,6 +136,7 @@ g_offsets.remove((1,-1,0))
 
 # TODO: make sure there's a handler for if this ever runs out
 # if that situation is hit, come up with a better solution
+
 # position 0 is None as it should never come up
 degeneracy_colors = [None, "black", "red", "orange", "yellow", "green", "blue", "purple"]
 
