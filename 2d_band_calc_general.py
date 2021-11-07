@@ -8,6 +8,8 @@ import matplotlib.pyplot as p
 
 from math import pi, isclose
 from itertools import product, zip_longest
+import tkinter
+from tkinter import filedialog
 import json
 
 class degeneracy_tracker(defaultdict):
@@ -64,8 +66,12 @@ def pairwise(iterable):
     next(b, None)
     return zip(a, b)
 
-
-with open("lattices/2d_hexagonal.json", "r") as f:
+# this script doesn't use any part of tkinter than the file dialog,
+# so the other window that pops up is closed with withdraw()
+root = tkinter.Tk()
+root.withdraw()
+filename = filedialog.askopenfilename(initialdir = "lattices")
+with open(filename, "r") as f:
     lattice_data: dict = json.load(f)
 
 direct_basis = np.array(lattice_data["basis"])
@@ -141,3 +147,7 @@ ax.set_xticks(list(range(len(points))))
 ax.set_xticklabels(point_names)
 ax.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
 p.show()
+
+# TODO: figure out how to make the script end on its own
+# either that or wait until the problem isn't a problem anymore
+# when a fuller GUI is made
