@@ -133,7 +133,8 @@ g_offsets.remove((1,-1,0))
 
 # TODO: make sure there's a handler for if this ever runs out
 # if that situation is hit, come up with a better solution
-degeneracy_colors = ["black", "red", "orange", "yellow", "green", "blue", "purple"]
+# position 0 is None as it should never come up
+degeneracy_colors = [None, "black", "red", "orange", "yellow", "green", "blue", "purple"]
 
 fig = p.figure()
 ax  = fig.add_subplot()
@@ -153,10 +154,7 @@ for i in range(len(paths)):
 
         # degeneracy is checked for at the endpoints of bands, since there is only one
         # possible path between 2 endpoints
-        if endpoints in degeneracies:
-            degeneracies[endpoints] += 1
-        else:
-            degeneracies[endpoints] = 0
+        degeneracies[endpoints] += 1
 
         ax.plot(plot_range, energies, color = degeneracy_colors[degeneracies[endpoints]])
 
