@@ -31,8 +31,8 @@ direct_basis = \
 np.array([   # these basis vectors are hard-coded for a hexagonal lattice
     # they are 3-d but the 3rd dimension will be ignored later
     [a, 0, 0],
-    # [a/2, sqrt(3)/2 * a, 0],
-    [0, a, 0],
+    [a/2, sqrt(3)/2 * a, 0],
+    # [0, a, 0],
     [0, 0, 1] # as the lattice is 2d right now, the height doesn't matter
 ])
 # common symbols for the vectors, for brevity
@@ -50,26 +50,26 @@ np.array([
 b1, b2, b3 = reciprocal_basis
 
 # here's where the third dimension is ignored
-# points = \
-# [
-#     (0,0,0),
-#     (2*pi/(3*a), 0, 0),
-#     (4*pi/(3*a), 0, 0),
-#     (pi/a, pi/(sqrt(3)*a), 0),
-#     (pi/(2*a), pi/(sqrt(3)*2*a), 0),
-#     (0, 0, 0)
-# ]
-
 points = \
 [
     (0,0,0),
-    (pi/(2*a), 0,0),
-    (pi/a, 0, 0),
-    (pi/a, pi/(2*a), 0),
-    (pi/a, pi/a, 0),
-    (pi/(2*a), pi/(2*a), 0),
-    (0,0,0)
+    (2*pi/(3*a), 0, 0),
+    (4*pi/(3*a), 0, 0),
+    (pi/a, pi/(sqrt(3)*a), 0),
+    (pi/(2*a), pi/(sqrt(3)*2*a), 0),
+    (0, 0, 0)
 ]
+
+# points = \
+# [
+#     (0,0,0),
+#     (pi/(2*a), 0,0),
+#     (pi/a, 0, 0),
+#     (pi/a, pi/(2*a), 0),
+#     (pi/a, pi/a, 0),
+#     (pi/(2*a), pi/(2*a), 0),
+#     (0,0,0)
+# ]
 
 point_names = \
 [
@@ -78,9 +78,19 @@ point_names = \
     "K",
     "M",
     "$\Sigma$",
-    "$\Gamma$",
-    "a"
+    "$\Gamma$"
 ]
+
+# point_names = \
+# [
+#     "$\Gamma$", 
+#     "$\Delta$", 
+#     "X", 
+#     "Z", 
+#     "M", 
+#     "$\Sigma$", 
+#     "$\Gamma$"
+# ]
 
 boundary_points = [0, 2, 3, 5]
 
@@ -99,7 +109,9 @@ for start, end in pairwise(points):
 
 g_range = range(-reciprocal_range, reciprocal_range + 1)
 # here is the second place to ignore the third dimension
-g_offsets = tuple(product(g_range, g_range, (0,)))
+g_offsets = set(product(g_range, g_range, (0,)))
+g_offsets.remove((-1, 1, 0))
+g_offsets.remove((1,-1,0))
 
 # TODO: make sure there's a handler for if this ever runs out
 # if that situation is hit, come up with a better solution
