@@ -27,6 +27,29 @@ class degeneracy_tracker(defaultdict):
         else:
             return super().__contains__(other)
 
+    def __getitem__(self, key):
+        if isinstance(key, tuple):
+            for member in self:
+                if all(isclose(a, b) for a, b in zip_longest(member, key)):
+                    return super().__getitem__(member)
+            else:
+                ret = self.default_factory()
+                self[key] = ret
+                return ret
+
+        else:
+            return super().__getitem__(key)
+
+    def __setitem__(self, key, v) -> None:
+        if isinstance(key, tuple):
+            for member in self:
+                if all(isclose(a, b) for a, b in zip_longest(member, key)):
+                    return super().__setitem__(member, v)
+            else:
+                return super().__setitem__(key, v)
+        else:
+            return super().__setitem__(key, v)
+
 def energy(positions):
     "Takes a list of vector positions and returns a list of energies"
     # squares each element of each vector, then sums the terms of each vector
