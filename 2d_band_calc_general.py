@@ -89,7 +89,7 @@ class histogram:
                 self._bins[key] += 1
                 break
         else:
-            self.max = ceil((x+(x-self.max)/2)/self.bin_size) * self.bin_size
+            self.max = ceil((x+(x-self.max)/2)/self.bin_size) * self.bin_size  + 10 # add a constant to buffer some for small x - self.max
             new_bin_count = ceil(self.max/self.bin_size)
             new_entries = {idx*self.bin_size: 0 for idx in range(self.bin_count + 1, new_bin_count + 1)}
             self._bins.update(new_entries)
