@@ -145,8 +145,8 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
     g_range = range(-reciprocal_range, reciprocal_range + 1)
     # here is the second place to ignore the third dimension
     g_offsets = set(product(g_range, g_range, (0,)))
-    g_offsets.remove((-1, 1, 0))
-    g_offsets.remove((1,-1,0))
+    # g_offsets.remove((-1, 1, 0))
+    # g_offsets.remove((1,-1,0))
 
     # TODO: make sure there's a handler for if this ever runs out
     # if that situation is hit, come up with a better solution
