@@ -6,8 +6,8 @@ import itertools
 import numpy as np
 import matplotlib.pyplot as p
 
-from math import pi, isclose
-from itertools import product, zip_longest
+from math import ceil, pi, isclose
+from itertools import product, zip_longest, dropwhile
 import tkinter
 from tkinter import filedialog
 import json
@@ -71,6 +71,34 @@ class degeneracy_tracker(defaultdict):
         else:
             return super().__setitem__(key, v)
 
+class histogram:
+    def __init__(self, init_range: float, bin_size: float):
+        self.bin_size = bin_size
+        self.max = ceil(init_range/bin_size) * bin_size
+        self.bin_count = ceil(self.max/bin_size)
+        self._bins: dict = {idx*bin_size: 0 for idx in range(1, self.bin_count + 1)}
+
+        self.items = self._bins.items
+
+    def add(self, x: float):
+        if x > self.max:
+            pass
+        
+        for key in self._bins:
+            if key > x:
+                self._bins[key] += 1
+                break
+        else:
+            self.max = ceil((x+(x-self.max)/2)/self.bin_size) * self.bin_size
+            new_bin_count = ceil(self.max/self.bin_size)
+            new_entries = {idx*self.bin_size: 0 for idx in range(self.bin_count + 1, new_bin_count + 1)}
+            self._bins.update(new_entries)
+            for key in dropwhile(lambda k: k/self.bin_size < self.bin_count, self._bins):
+                if key > x:
+                    self._bins[key] += 1
+                    break
+            self.bin_count = new_bin_count
+
 def energy(positions):
     "Takes a list of vector positions and returns a list of energies"
     # squares each element of each vector, then sums the terms of each vector
@@ -122,12 +150,14 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
 
     # TODO: make sure there's a handler for if this ever runs out
     # if that situation is hit, come up with a better solution
-
     # position 0 is None as it should never come up
     degeneracy_colors = [None, "black", "red", "orange", "yellow", "green", "blue", "purple"]
+    
+    # bin_size here is a total guess, gonna have to tweak it
+    state_densities = histogram(init_range = reciprocal_range**2 * np.dot(lat.b1 + lat.b2, lat.b1 + lat.b2), bin_size = 50/resolution)
 
     fig = p.figure()
-    ax  = fig.add_subplot()
+    ax  = fig.add_subplot(2, 1, 1)
 
     for point in lat.vertical_lines:
         p.axvline(point, linestyle = "--", color = (0, 0, 0, .5))
@@ -146,12 +176,24 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
             # possible path between 2 endpoints
             degeneracies[endpoints] += 1
 
+            # add energies to density of states plot
+            for e in energies:
+                state_densities.add(e)
+
             ax.plot(plot_range, energies, color = degeneracy_colors[degeneracies[endpoints]])
 
     ax.set_xlabel("High Symmetry Points")
     ax.set_xticks(list(range(len(lat.points))))
     ax.set_xticklabels(lat.point_names)
     ax.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
+    
+    dax = fig.add_subplot(2, 1, 2)
+    dax.set_xlabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
+    dax.set_ylabel("Density")
+    
+    density_data = np.array(list(state_densities.items()))
+    dax.plot(density_data[:,0], density_data[:,1])
+
     p.show()
 
 # TODO: figure out how to make the script end on its own
