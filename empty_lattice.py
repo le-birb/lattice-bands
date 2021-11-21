@@ -8,11 +8,11 @@ import matplotlib.pyplot as p
 
 from math import ceil, isclose
 from itertools import product, zip_longest, dropwhile
-import tkinter
-from tkinter import filedialog
-import json
+
+from numpy.lib.npyio import load
 
 from lattice import lattice
+from json_interface import load_lattice
 
 class degeneracy_tracker(defaultdict):
     __sentinel = object()
@@ -93,17 +93,6 @@ def pairwise(iterable):
     next(b, None)
     return zip(a, b)
 
-def _get_lattice() -> lattice:
-    # this script doesn't use any part of tkinter than the file dialog,
-    # so the other window that pops up is closed with withdraw()
-    root = tkinter.Tk()
-    root.withdraw()
-    filename = filedialog.askopenfilename(initialdir = "lattices")
-    with open(filename, "r") as f:
-        lattice_data: dict = json.load(f)
-    # TODO: write a thing to just turn the dictionary into a class
-    return lattice(lattice_data["basis"], lattice_data["dimension"], lattice_data["points"], lattice_data["point_names"], lattice_data["line_points"])
-
 def get_g_vectors(reciprocal_basis, distance: int):
     multiples = np.array(list(product(range(-distance, distance + 1), repeat = len(reciprocal_basis))))
     # matrix multiplication is a shortcut here, I don't know if there's a good reason to use it other than it works
@@ -182,5 +171,7 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
 # when a fuller GUI is made
 
 if __name__ == "__main__":
-    lat = _get_lattice()
+    from tkinter.filedialog import askopenfilename
+    file = askopenfilename(defaultextension = ".json", initialdir = "lattices")
+    lat = load_lattice(file)
     plot_bands(lat)
