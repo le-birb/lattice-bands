@@ -9,8 +9,6 @@ import matplotlib.pyplot as p
 from math import ceil, isclose
 from itertools import product, zip_longest, dropwhile
 
-from numpy.lib.npyio import load
-
 from lattice import lattice
 from json_interface import load_lattice
 
