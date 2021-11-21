@@ -2,12 +2,11 @@
 from __future__ import annotations
 from collections import defaultdict
 
-import itertools
 import numpy as np
 import matplotlib.pyplot as p
 
 from math import ceil, isclose
-from itertools import product, zip_longest, dropwhile
+from itertools import product, zip_longest, dropwhile, tee
 
 from lattice import lattice
 from json_interface import load_lattice
@@ -87,7 +86,7 @@ def energy(positions):
 
 def pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
-    a, b = itertools.tee(iterable)
+    a, b = tee(iterable)
     next(b, None)
     return zip(a, b)
 
