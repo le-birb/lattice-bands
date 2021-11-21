@@ -25,9 +25,9 @@ class lattice:
         
         self.reciprocal_basis = np.array(
         [
-            np.cross(self._a2, self._a3)/self._direct_triple,
-            np.cross(self._a3, self._a1)/self._direct_triple,
-            np.cross(self._a1, self._a2)/self._direct_triple
+            (np.cross(self._a2, self._a3)/self._direct_triple)[0:dimension],
+            (np.cross(self._a3, self._a1)/self._direct_triple)[0:dimension],
+            (np.cross(self._a1, self._a2)/self._direct_triple)[0:dimension]
         ])[0:dimension]*(2*pi)
 
 class degeneracy_tracker(defaultdict):
