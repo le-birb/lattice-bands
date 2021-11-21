@@ -14,9 +14,9 @@ import json
 
 
 class lattice:
-    def __init__(self, basis = [], points = [], point_names = [], vertical_lines = []):
+    def __init__(self, basis = [], dimension = 0, points = [], point_names = [], vertical_lines = []):
         self.basis = list(basis)
-        self.a1, self.a2, self.a3 = self.basis
+        self._a1, self._a2, self._a3 = self.basis
         self._direct_triple = triple_product(*self.basis)
         
         self.points = list(points)
@@ -25,11 +25,10 @@ class lattice:
         
         self.reciprocal_basis = np.array(
         [
-            np.cross(self.a2, self.a3)/self._direct_triple,
-            np.cross(self.a3, self.a1)/self._direct_triple,
-            np.cross(self.a1, self.a2)/self._direct_triple
-        ])*(2*pi)
-        self.b1, self.b2, self.b3 = self.reciprocal_basis
+            np.cross(self._a2, self._a3)/self._direct_triple,
+            np.cross(self._a3, self._a1)/self._direct_triple,
+            np.cross(self._a1, self._a2)/self._direct_triple
+        ])[0:dimension]*(2*pi)
 
 class degeneracy_tracker(defaultdict):
     __sentinel = object()
@@ -121,7 +120,9 @@ def _get_lattice() -> lattice:
     filename = filedialog.askopenfilename(initialdir = "lattices")
     with open(filename, "r") as f:
         lattice_data: dict = json.load(f)
-    return lattice(lattice_data["basis"], lattice_data["points"], lattice_data["point_names"], lattice_data["line_points"])
+    # TODO: write a thing to just turn the dictionary into a class
+    return lattice(lattice_data["basis"], lattice_data["dimension"], lattice_data["points"], lattice_data["point_names"], lattice_data["line_points"])
+
 
 def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
     reciprocal_range = 1
@@ -154,7 +155,7 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
     degeneracy_colors = [None, "black", "red", "orange", "yellow", "green", "blue", "purple"]
     
     # bin_size here is a total guess, gonna have to tweak it
-    state_densities = histogram(init_range = reciprocal_range**2 * np.dot(lat.b1 + lat.b2, lat.b1 + lat.b2), bin_size = 50/resolution)
+    state_densities = histogram(init_range = reciprocal_range**2 * np.dot(sum(lat.reciprocal_basis), sum(lat.reciprocal_basis)), bin_size = 50/resolution)
 
     fig = p.figure()
     ax  = fig.add_subplot(2, 1, 1)

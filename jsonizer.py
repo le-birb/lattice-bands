@@ -6,11 +6,12 @@ import json
 from math import sqrt, pi
 
 class lattice:
-    def __init__(self, basis = [], points = [], point_names = [], line_points = []):
+    def __init__(self, basis = [], points = [], point_names = [], line_points = [], dim = 0):
         self.basis = list(basis)
         self.points = list(points)
         self.point_names = list(point_names)
         self.line_points = list(line_points)
+        self.dimension = dim
 
 a = 1
 direct_basis = \
@@ -44,6 +45,8 @@ point_names = \
 
 boundary_points = [0, 2, 4, 6]
 
+dim = 2
+
 with open("lattices/2d_square.json", "w") as out:
-    json.dump(lattice(direct_basis, points, point_names, boundary_points).__dict__, out, indent = 4)
+    json.dump(lattice(direct_basis, points, point_names, boundary_points, dim).__dict__, out, indent = 4)
 
