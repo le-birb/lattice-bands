@@ -6,29 +6,13 @@ import itertools
 import numpy as np
 import matplotlib.pyplot as p
 
-from math import ceil, pi, isclose
+from math import ceil, isclose
 from itertools import product, zip_longest, dropwhile
 import tkinter
 from tkinter import filedialog
 import json
 
-
-class lattice:
-    def __init__(self, basis = [], dimension = 0, points = [], point_names = [], vertical_lines = []):
-        self.basis = list(basis)
-        self._a1, self._a2, self._a3 = self.basis
-        self._direct_triple = triple_product(*self.basis)
-        
-        self.points = list(points)
-        self.point_names = list(point_names)
-        self.vertical_lines = list(vertical_lines)
-        
-        self.reciprocal_basis = np.array(
-        [
-            (np.cross(self._a2, self._a3)/self._direct_triple)[0:dimension],
-            (np.cross(self._a3, self._a1)/self._direct_triple)[0:dimension],
-            (np.cross(self._a1, self._a2)/self._direct_triple)[0:dimension]
-        ])[0:dimension]*(2*pi)
+from lattice import lattice
 
 class degeneracy_tracker(defaultdict):
     __sentinel = object()
@@ -102,9 +86,6 @@ def energy(positions):
     "Takes a list of vector positions and returns a list of energies"
     # squares each element of each vector, then sums the terms of each vector
     return (positions**2).sum(1)
-
-def triple_product(a, b, c) -> float:
-    return np.dot(a, np.cross(b, c))
 
 def pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
