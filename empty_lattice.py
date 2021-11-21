@@ -123,6 +123,13 @@ def _get_lattice() -> lattice:
     # TODO: write a thing to just turn the dictionary into a class
     return lattice(lattice_data["basis"], lattice_data["dimension"], lattice_data["points"], lattice_data["point_names"], lattice_data["line_points"])
 
+def get_g_vectors(reciprocal_basis, distance: int):
+    multiples = np.array(list(product(range(-distance, distance + 1), repeat = len(reciprocal_basis))))
+    # matrix multiplication is a shortcut here, I don't know if there's a good reason to use it other than it works
+    # basically, it adds up the contributions of each reciprocal basis vector according to each 'multiple' tuple
+    offsets = multiples @ reciprocal_basis
+    max_distance = max(distance * np.linalg.norm(base) for base in reciprocal_basis)
+    return list(filter(lambda x: np.linalg.norm(x) <= max_distance, offsets))
 
 def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
     reciprocal_range = 1
@@ -140,14 +147,7 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
         curr_range_start += 1
         seen_endpoints.append(degeneracy_tracker())
 
-    # TODO: rework this to visit only nth nearest-neighbors instead of
-    # all the points within n reciprocal basis vectors away in each direction
-    # this will help make sure that degeneracy is consistent
-    g_range = range(-reciprocal_range, reciprocal_range + 1)
-    # here is the second place to ignore the third dimension
-    g_offsets = set(product(g_range, g_range, (0,)))
-    # g_offsets.remove((-1, 1, 0))
-    # g_offsets.remove((1,-1,0))
+    g_offsets = get_g_vectors(lat.reciprocal_basis, reciprocal_range)
 
     # TODO: make sure there's a handler for if this ever runs out
     # if that situation is hit, come up with a better solution
@@ -169,8 +169,7 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
         degeneracies = seen_endpoints[i]
 
         for offset in g_offsets:
-            actual_k = (offset*lat.reciprocal_basis).sum(0)
-            energies = energy(path + actual_k)
+            energies = energy(path + offset)
             endpoints = (energies[0], energies[-1])
 
             # degeneracy is checked for at the endpoints of bands, since there is only one
