@@ -5,7 +5,7 @@ __pycache__/
 .vscode
 
 # matplotlib-generated images
-*.png
+figures/
 
 # reserve a test-bed for myself
 garbage/

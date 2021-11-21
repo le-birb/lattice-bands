@@ -171,6 +171,8 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
 # when a fuller GUI is made
 
 if __name__ == "__main__":
+    from matplotlib import rcParams
+    rcParams["savefig.directory"] = "figures"
     from tkinter.filedialog import askopenfilename
     file = askopenfilename(defaultextension = ".json", initialdir = "lattices")
     lat = load_lattice(file)
