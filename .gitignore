@@ -1,2 +1,6 @@
+# binaries
+__pycache__/
+# vscode files
 .vscode
+# matplotlib-generated images
 *.png
