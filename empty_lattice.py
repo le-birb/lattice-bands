@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections import defaultdict
 
 import numpy as np
-import matplotlib.pyplot as p
 
 from math import ceil, isclose
 from itertools import product, zip_longest, dropwhile, tee
 
 from lattice import lattice
-from json_interface import load_lattice
 
 class degeneracy_tracker(defaultdict):
     __sentinel = object()
@@ -98,7 +96,8 @@ def get_g_vectors(reciprocal_basis, distance: int):
     max_distance = max(distance * np.linalg.norm(base) for base in reciprocal_basis)
     return list(filter(lambda x: np.linalg.norm(x) <= max_distance, offsets))
 
-def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50, plot_density = False):
+# TODO: remove density of states plotting from this function, and change it to take axes rather than a figure
+def plot_bands(lat: lattice, axes, reciprocal_range = 1, resolution = 50, plot_density = False):
     reciprocal_range = 1
 
     resolution = 50
@@ -125,11 +124,7 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50, plot_density
         # bin_size here is a total guess, gonna have to tweak it
         state_densities = histogram(init_range = reciprocal_range**2 * np.dot(sum(lat.reciprocal_basis), sum(lat.reciprocal_basis)), bin_size = 50/resolution)
 
-    fig = p.figure()
-    ax  = fig.add_subplot(2, 1, 1)
-
-    for point in lat.vertical_lines:
-        p.axvline(point, linestyle = "--", color = (0, 0, 0, .5))
+    axes.vlines(lat.vertical_lines, 0, 1, transform = axes.get_xaxis_transform(), linestyle = "--", color = (0, 0, 0, .5))
 
     for i in range(len(paths)):
         path = paths[i]
@@ -149,31 +144,4 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50, plot_density
                 for e in energies:
                     state_densities.add(e)
 
-            ax.plot(plot_range, energies, color = degeneracy_colors[degeneracies[endpoints]])
-
-    ax.set_xlabel("High Symmetry Points")
-    ax.set_xticks(list(range(len(lat.points))))
-    ax.set_xticklabels(lat.point_names)
-    ax.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
-    
-    if plot_density:
-        dax = fig.add_subplot(2, 1, 2)
-        dax.set_xlabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
-        dax.set_ylabel("Density")
-        
-        density_data = np.array(list(state_densities.items()))
-        dax.plot(density_data[:,0], density_data[:,1])
-
-    p.show()
-
-# TODO: figure out how to make the script end on its own
-# either that or wait until the problem isn't a problem anymore
-# when a fuller GUI is made
-
-if __name__ == "__main__":
-    from matplotlib import rcParams
-    rcParams["savefig.directory"] = "figures"
-    from tkinter.filedialog import askopenfilename
-    file = askopenfilename(defaultextension = ".json", initialdir = "lattices")
-    lat = load_lattice(file)
-    plot_bands(lat)
+            axes.plot(plot_range, energies, color = degeneracy_colors[degeneracies[endpoints]])
