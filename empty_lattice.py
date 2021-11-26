@@ -98,7 +98,7 @@ def get_g_vectors(reciprocal_basis, distance: int):
     max_distance = max(distance * np.linalg.norm(base) for base in reciprocal_basis)
     return list(filter(lambda x: np.linalg.norm(x) <= max_distance, offsets))
 
-def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
+def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50, plot_density = False):
     reciprocal_range = 1
 
     resolution = 50
@@ -121,8 +121,9 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
     # position 0 is None as it should never come up
     degeneracy_colors = [None, "black", "red", "orange", "yellow", "green", "blue", "purple"]
     
-    # bin_size here is a total guess, gonna have to tweak it
-    state_densities = histogram(init_range = reciprocal_range**2 * np.dot(sum(lat.reciprocal_basis), sum(lat.reciprocal_basis)), bin_size = 50/resolution)
+    if plot_density:
+        # bin_size here is a total guess, gonna have to tweak it
+        state_densities = histogram(init_range = reciprocal_range**2 * np.dot(sum(lat.reciprocal_basis), sum(lat.reciprocal_basis)), bin_size = 50/resolution)
 
     fig = p.figure()
     ax  = fig.add_subplot(2, 1, 1)
@@ -143,9 +144,10 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
             # possible path between 2 endpoints
             degeneracies[endpoints] += 1
 
-            # add energies to density of states plot
-            for e in energies:
-                state_densities.add(e)
+            if plot_density:
+                # add energies to density of states plot
+                for e in energies:
+                    state_densities.add(e)
 
             ax.plot(plot_range, energies, color = degeneracy_colors[degeneracies[endpoints]])
 
@@ -154,12 +156,13 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
     ax.set_xticklabels(lat.point_names)
     ax.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
     
-    dax = fig.add_subplot(2, 1, 2)
-    dax.set_xlabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
-    dax.set_ylabel("Density")
-    
-    density_data = np.array(list(state_densities.items()))
-    dax.plot(density_data[:,0], density_data[:,1])
+    if plot_density:
+        dax = fig.add_subplot(2, 1, 2)
+        dax.set_xlabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
+        dax.set_ylabel("Density")
+        
+        density_data = np.array(list(state_densities.items()))
+        dax.plot(density_data[:,0], density_data[:,1])
 
     p.show()
 
