@@ -1,2 +1,11 @@
+# binaries
+__pycache__/
+
+# vscode files
 .vscode
-*.png
+
+# matplotlib-generated images
+figures/
+
+# reserve a test-bed for myself
+garbage/

@@ -2,33 +2,14 @@
 from __future__ import annotations
 from collections import defaultdict
 
-import itertools
 import numpy as np
 import matplotlib.pyplot as p
 
-from math import ceil, pi, isclose
-from itertools import product, zip_longest, dropwhile
-import tkinter
-from tkinter import filedialog
-import json
+from math import ceil, isclose
+from itertools import product, zip_longest, dropwhile, tee
 
-
-class lattice:
-    def __init__(self, basis = [], dimension = 0, points = [], point_names = [], vertical_lines = []):
-        self.basis = list(basis)
-        self._a1, self._a2, self._a3 = self.basis
-        self._direct_triple = triple_product(*self.basis)
-        
-        self.points = list(points)
-        self.point_names = list(point_names)
-        self.vertical_lines = list(vertical_lines)
-        
-        self.reciprocal_basis = np.array(
-        [
-            (np.cross(self._a2, self._a3)/self._direct_triple)[0:dimension],
-            (np.cross(self._a3, self._a1)/self._direct_triple)[0:dimension],
-            (np.cross(self._a1, self._a2)/self._direct_triple)[0:dimension]
-        ])[0:dimension]*(2*pi)
+from lattice import lattice
+from json_interface import load_lattice
 
 class degeneracy_tracker(defaultdict):
     __sentinel = object()
@@ -103,25 +84,11 @@ def energy(positions):
     # squares each element of each vector, then sums the terms of each vector
     return (positions**2).sum(1)
 
-def triple_product(a, b, c) -> float:
-    return np.dot(a, np.cross(b, c))
-
 def pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
-    a, b = itertools.tee(iterable)
+    a, b = tee(iterable)
     next(b, None)
     return zip(a, b)
-
-def _get_lattice() -> lattice:
-    # this script doesn't use any part of tkinter than the file dialog,
-    # so the other window that pops up is closed with withdraw()
-    root = tkinter.Tk()
-    root.withdraw()
-    filename = filedialog.askopenfilename(initialdir = "lattices")
-    with open(filename, "r") as f:
-        lattice_data: dict = json.load(f)
-    # TODO: write a thing to just turn the dictionary into a class
-    return lattice(lattice_data["basis"], lattice_data["dimension"], lattice_data["points"], lattice_data["point_names"], lattice_data["line_points"])
 
 def get_g_vectors(reciprocal_basis, distance: int):
     multiples = np.array(list(product(range(-distance, distance + 1), repeat = len(reciprocal_basis))))
@@ -201,5 +168,9 @@ def plot_bands(lat: lattice, reciprocal_range = 1, resolution = 50):
 # when a fuller GUI is made
 
 if __name__ == "__main__":
-    lat = _get_lattice()
+    from matplotlib import rcParams
+    rcParams["savefig.directory"] = "figures"
+    from tkinter.filedialog import askopenfilename
+    file = askopenfilename(defaultextension = ".json", initialdir = "lattices")
+    lat = load_lattice(file)
     plot_bands(lat)
