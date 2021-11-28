@@ -98,9 +98,6 @@ def get_g_vectors(reciprocal_basis, distance: int):
 
 # TODO: remove density of states plotting from this function, and change it to take axes rather than a figure
 def plot_bands(lat: lattice, axes, reciprocal_range = 1, resolution = 50, plot_density = False):
-    reciprocal_range = 1
-
-    resolution = 50
 
     paths = []
     plot_ranges = []
