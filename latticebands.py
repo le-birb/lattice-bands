@@ -21,7 +21,7 @@ root.columnconfigure(1, weight = 1)
 root.rowconfigure(0, weight = 1)
 
 interfaceframe = ttk.Frame(mainframe, padding = 10)
-interfaceframe.grid(column = 1, row = 0, sticky = "NE")
+interfaceframe.grid(column = 1, row = 0, sticky = "NESW")
 interfaceframe.rowconfigure(0, weight = 1)
 interfaceframe.rowconfigure(1, weight = 1)
 
