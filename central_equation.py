@@ -1,7 +1,7 @@
 
 from __future__ import annotations
 
-from itertools import tee
+from itertools import product, tee
 from math import isqrt
 
 import numpy as np
@@ -43,15 +43,21 @@ def get_bands(path, fourier_coefficients: list, band_count: int = 9) -> list:
     for i in range(band_count):
         energy_bands.append(np.zeros(len(path)))
 
+    a = _inv_index(band_count - 1)[0]
+
     energy_idx = 0
     for k in path:
         matrix = np.zeros((band_count, band_count))
         for row in range(len(matrix)): 
-            for col in range(len(matrix)):
-                matrix[row][col] = fourier_coefficients[col]
-                if row == col:
-                    g = np.array(_inv_index(row))
-                    matrix[row][col] += np.dot(k + g, k + g)
+            (x, y) = _inv_index(row)
+            for (gx, gy) in product(range(-a, a+1), repeat = 2):
+                G = x + gx, y + gy
+                try:
+                    matrix[row][_index(gx,  gy)] += fourier_coefficients[_index(*G)]
+                except IndexError: # if either index is out of range, we're throwing away that term
+                    pass
+        for i in range(len(matrix)):
+            matrix[i][i] += np.dot(k, k)
         energies = np.sort(np.linalg.eigvals(matrix))
         for i in range(len(energies)):
             energy_bands[i][energy_idx] = energies[i]
@@ -68,7 +74,7 @@ if __name__ == "__main__":
         return zip(a, b)
 
     lat = load_lattice("lattices/2d_square.json")
-    
+
     resolution = 50
 
     paths = []
@@ -89,6 +95,6 @@ if __name__ == "__main__":
         path = paths[i]
         bands = get_bands(path, [0, 0, 0, 1, 0, 1, 0, 1, 1])
         for band in bands:
-            ax.plot(plot_ranges[i], band)
+            ax.plot(plot_ranges[i], band, "-k")
 
 p.show()
