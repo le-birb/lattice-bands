@@ -1,6 +1,10 @@
 
+from __future__ import annotations
+
 import tkinter as tk
 from tkinter import ttk, filedialog
+import os
+
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib
@@ -25,16 +29,17 @@ interfaceframe.grid(column = 1, row = 0, sticky = "NESW")
 interfaceframe.rowconfigure(0, weight = 1)
 interfaceframe.rowconfigure(1, weight = 1)
 
-def get_lattice_file():
-    lattice_path.set(filedialog.askopenfilename(initialdir = "lattices"))
+files: list[str] = os.listdir("lattices")
+json_files = []
 
-lattice_path = tk.StringVar(value = "No lattice selected")
+for filename in files:
+    if filename.endswith(".json"):
+        json_files.append(filename[:-5])
 
-file_label = ttk.Label(interfaceframe, textvariable = lattice_path, wraplength = 150)
-file_label.grid(column = 0, row = 0, sticky = "")
-file_button = ttk.Button(interfaceframe, text = "Select lattice file", command = get_lattice_file)
-file_button.grid(column = 0, row = 1, sticky = "N")
-
+lattice = tk.StringVar()
+lattice.set("2d_square")
+file_menu = ttk.OptionMenu(interfaceframe, lattice, lattice.get(), *json_files)
+file_menu.grid(column = 0, row = 1)
 
 def _validate_num(text: str):
     return text.isdigit()
@@ -70,7 +75,8 @@ density_plot_checkbox.grid(column = 0, row = 15)
 def plot_bands():
     band_axes.clear()
 
-    lat = load_lattice(lattice_path.get())
+    lattice_path = f"lattices/{lattice.get()}.json"
+    lat = load_lattice(lattice_path)
     empty_lattice.plot_bands(lat, band_axes, reciprocal_range = int(range_var.get()), resolution = int(resolution_var.get()))
 
     band_axes.set_xlabel("High Symmetry Points")
