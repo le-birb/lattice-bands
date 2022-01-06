@@ -54,7 +54,9 @@ def get_bands(path, fourier_coefficients: list, band_count: int = 9) -> list:
                 G_prime = np.array(G_prime)
                 try:
                     matrix[row][_index(*G_prime)] += fourier_coefficients[_index(*(G - G_prime))]
-                except IndexError: # if either index is out of range, we're throwing away that term
+                except IndexError:
+                    # if the matrix index is out of range, that term is thrown out
+                    # if the fourier coefficient is out of bounds, we assume it is 0 and thus adds nothing
                     pass
         for i in range(len(matrix)):
             G = np.array(_inv_index(i))
