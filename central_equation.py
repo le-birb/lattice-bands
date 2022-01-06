@@ -49,15 +49,16 @@ def get_bands(path, fourier_coefficients: list, band_count: int = 9) -> list:
     for k in path:
         matrix = np.zeros((band_count, band_count))
         for row in range(len(matrix)): 
-            (x, y) = _inv_index(row)
-            for (gx, gy) in product(range(-a, a+1), repeat = 2):
-                G = x + gx, y + gy
+            G = np.array(_inv_index(row))
+            for G_prime in product(range(-a, a+1), repeat = 2):
+                G_prime = np.array(G_prime)
                 try:
-                    matrix[row][_index(gx,  gy)] += fourier_coefficients[_index(*G)]
+                    matrix[row][_index(*G_prime)] += fourier_coefficients[_index(*(G - G_prime))]
                 except IndexError: # if either index is out of range, we're throwing away that term
                     pass
         for i in range(len(matrix)):
-            matrix[i][i] += np.dot(k, k)
+            G = np.array(_inv_index(i))
+            matrix[i][i] += np.dot(k - G, k - G)
         energies = np.sort(np.linalg.eigvals(matrix))
         for i in range(len(energies)):
             energy_bands[i][energy_idx] = energies[i]
