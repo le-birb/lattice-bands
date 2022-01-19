@@ -100,4 +100,4 @@ if __name__ == "__main__":
         for band in bands:
             ax.plot(plot_ranges[i], band, "-k")
 
-p.show()
+    p.show()
