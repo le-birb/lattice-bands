@@ -62,7 +62,6 @@ def get_bands(path, fourier_coefficients: list, band_count: int = 9) -> list:
 
                 if all(a == b):
                     matrix[row, column] += l * np.dot(k + b, k + b)
-
         energies = np.sort(np.linalg.eigvals(matrix))
         for i in range(len(energies)):
             energy_bands[i][energy_idx] = energies[i]
@@ -102,4 +101,4 @@ if __name__ == "__main__":
         for band in bands:
             ax.plot(plot_ranges[i], band, "-k")
 
-p.show()
+    p.show()
