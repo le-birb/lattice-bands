@@ -71,6 +71,16 @@ def get_bands(path, fourier_coefficients: list, band_count: int = 9) -> list:
 
 
 if __name__ == "__main__":
+    # temp code to test a "more physical" potential
+    class typical_v(list):
+        def __getitem__(self, idx):
+            x, y = _inv_index(idx)
+            if x == y == 0:
+                return 0
+            else:
+                return 1/(x**2 + y**2)
+
+
     def pairwise(iterable):
         "s -> (s0,s1), (s1,s2), (s2, s3), ..."
         a, b = tee(iterable)
@@ -95,9 +105,12 @@ if __name__ == "__main__":
     for point in lat.vertical_lines:
         p.axvline(point, linestyle = "--", color = (0, 0, 0, .5))
 
+    # v = [0, 0, 0, 1, 0, 1, 0, 1, 1]
+    v = typical_v()
+
     for i in range(len(paths)):
         path = paths[i]
-        bands = get_bands(path, [0, 0, 0, 1, 0, 1, 0, 1, 1])
+        bands = get_bands(path, v)
         for band in bands:
             ax.plot(plot_ranges[i], band, "-k")
 
