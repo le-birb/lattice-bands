@@ -56,7 +56,7 @@ def get_bands(path, fourier_coefficients: list, band_count: int = 9) -> list:
                 a = np.array(_inv_index(row))
                 b = np.array(_inv_index(column))
                 try:
-                    matrix[row, column] = fourier_coefficients[_index(*(b - a))]
+                    matrix[row, column] = fourier_coefficients[_index(*(a - b))]
                 except IndexError:
                     pass # an index error means the fourier coefficient is outside the defined set, so we assume it is 0
 
