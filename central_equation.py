@@ -118,10 +118,13 @@ if __name__ == "__main__":
     vt = typical_v(10)
     zero_v = []
 
-    for i in range(len(paths)):
-        path = paths[i]
-        bands = get_bands(path, v)
-        for band in bands:
+    band_count = 9
+
+    for i, path in enumerate(paths):
+        bands = get_bands(path, vt, band_count)
+        bands_0 = get_bands(path, zero_v, band_count)
+        for band_0, band in zip(bands_0, bands):
+            ax.plot(plot_ranges[i], band_0, color = (.5, .5, .5), linestyle = "dashed")
             ax.plot(plot_ranges[i], band, "-k")
 
     p.show()
