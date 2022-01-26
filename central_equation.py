@@ -38,33 +38,38 @@ def _inv_index(n: int) -> tuple[int, int]:
     return a, b
 
 
+def get_energies(k, band_count, fourier_coefficients: list):
+    # temporarily set to 1, here to change later if it matters
+    l = 1
+
+    matrix = np.zeros((band_count, band_count))
+    for row in range(len(matrix)): 
+        for column in range(len(matrix[0])):
+            # with vector indices, the (a,b)th entry in the matrix is U[a-b], remembering that a and b are vectors
+            # when a = b, there is an additional h^2/2m * (k + b)^2 term added in
+            a = np.array(_inv_index(row))
+            b = np.array(_inv_index(column))
+            try:
+                matrix[row, column] = fourier_coefficients[_index(*(a - b))]
+            except IndexError:
+                pass # an index error means the fourier coefficient is outside the defined set, so we assume it is 0
+
+            if all(a == b):
+                matrix[row, column] += l * np.dot(k + b, k + b)
+    return np.linalg.eigvals(matrix)
+
+
 def get_bands(path, fourier_coefficients: list, band_count: int = 9) -> list:
     energy_bands = []
     for i in range(band_count):
         energy_bands.append(np.zeros(len(path)))
 
-    # TODO: decide how to handle this coefficient
-    l = 1
-
     energy_idx = 0
     for k in path:
-        matrix = np.zeros((band_count, band_count))
-        for row in range(len(matrix)): 
-            for column in range(len(matrix[0])):
-                # with vector indices, the (a,b)th entry in the matrix is U[a-b], remembering that a and b are vectors
-                # when a = b, there is an additional h^2/2m * (k + b)^2 term added in
-                a = np.array(_inv_index(row))
-                b = np.array(_inv_index(column))
-                try:
-                    matrix[row, column] = fourier_coefficients[_index(*(a - b))]
-                except IndexError:
-                    pass # an index error means the fourier coefficient is outside the defined set, so we assume it is 0
-
-                if all(a == b):
-                    matrix[row, column] += l * np.dot(k + b, k + b)
-        energies = np.sort(np.linalg.eigvals(matrix))
-        for i in range(len(energies)):
-            energy_bands[i][energy_idx] = energies[i]
+        energies = get_energies(k, band_count, fourier_coefficients)
+        energies = np.sort(energies)
+        for i, energy in enumerate(energies):
+            energy_bands[i][energy_idx] = energy
         energy_idx += 1
 
     return energy_bands
