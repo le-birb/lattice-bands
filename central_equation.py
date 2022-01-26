@@ -114,8 +114,9 @@ if __name__ == "__main__":
     for point in lat.vertical_lines:
         p.axvline(point, linestyle = "--", color = (.5, .5, .5, .5))
 
-    # v = [0, 0, 0, 1, 0, 1, 0, 1, 1]
-    v = typical_v()
+    v_simple = [0, 0, 0, 1, 0, 1, 0, 1, 1]
+    vt = typical_v(10)
+    zero_v = []
 
     for i in range(len(paths)):
         path = paths[i]
