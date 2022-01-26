@@ -78,12 +78,16 @@ def get_bands(path, fourier_coefficients: list, band_count: int = 9) -> list:
 if __name__ == "__main__":
     # temp code to test a "more physical" potential
     class typical_v(list):
+        def __init__(self, multiple):
+            super().__init__()
+            self.multiple = multiple
+
         def __getitem__(self, idx):
             x, y = _inv_index(idx)
             if x == y == 0:
                 return 0
             else:
-                return 1/(x**2 + y**2)
+                return self.multiple/(x**2 + y**2)
 
 
     def pairwise(iterable):
