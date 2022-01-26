@@ -112,7 +112,7 @@ if __name__ == "__main__":
     fig = p.figure()
     ax = fig.add_subplot(1,1,1)
     for point in lat.vertical_lines:
-        p.axvline(point, linestyle = "--", color = (0, 0, 0, .5))
+        p.axvline(point, linestyle = "--", color = (.5, .5, .5, .5))
 
     # v = [0, 0, 0, 1, 0, 1, 0, 1, 1]
     v = typical_v()
