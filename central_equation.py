@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from itertools import product, tee
 from math import isqrt
+from numbers import Number
 
 import numpy as np
 import matplotlib.pyplot as p
@@ -78,16 +79,15 @@ def get_bands(path, fourier_coefficients: list, band_count: int = 9) -> list:
 if __name__ == "__main__":
     # temp code to test a "more physical" potential
     class typical_v(list):
-        def __init__(self, multiple):
+        def __init__(self, scale: Number = 1):
             super().__init__()
-            self.multiple = multiple
-
+            self.scale = scale
         def __getitem__(self, idx):
             x, y = _inv_index(idx)
             if x == y == 0:
                 return 0
             else:
-                return self.multiple/(x**2 + y**2)
+                return self.scale/(x**2 + y**2)
 
 
     def pairwise(iterable):
