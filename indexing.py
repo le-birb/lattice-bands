@@ -4,7 +4,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from math import isqrt
 
-from itertools import count, product
+from itertools import count
 
 
 def _index2(t: Sequence[int, int]) -> int:
