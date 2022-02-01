@@ -95,7 +95,7 @@ def int_to_n(i: int) -> int:
 def n_to_int(n: int) -> int:
     "Maps the input natural number onto an integer. Is the inverse function of int_to_n()."
     if n < 0:
-        raise ValueError("Input must be a natural number")
+        raise ValueError("Input must be a natural number (nonnegative integer)")
     if n%2 == 0:
         return n/2
     else:
