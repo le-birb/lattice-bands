@@ -111,3 +111,7 @@ def int_index(t: Sequence[int])  -> int:
     """Extends index() to apply to tuples of integers by composing index() with int_to_n()"""
     return index( (int_to_n(i) for i in t) )
 
+def inv_int_index(n: int, dim: int) -> tuple[int, ...]:
+    """This function is the inverse of int_index() with an input of length dim"""
+    return (n_to_int(m) for m in inv_index(n, dim))
+
