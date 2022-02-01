@@ -24,6 +24,10 @@ def _index3(t: Sequence[int, int, int]) -> int:
         return m**3 + (2*m + 1)*t[0] + t[1]
 
 def index(t: Sequence[int]) -> int:
+    """Maps an n-length sequence of natural numbers onto a single natural number in a bijective fashion.
+    
+    Currently only implementd for 1 <= n <= 3"""
+    # TODO: add checks for negative inputs
     match len(t):
         case 1:
             return t[0]
@@ -72,6 +76,7 @@ def _inv_index3(n: int) -> int:
             return x, y, c
 
 def inv_index(n: int, dim: int) -> tuple[int, ...]:
+    """Maps a natural number n to a tuple of natural numbers of length dim. inv_index() is the inverse of index() when called with a tuple of length dim."""
     match dim:
         case 1:
             return n
@@ -86,14 +91,14 @@ def inv_index(n: int, dim: int) -> tuple[int, ...]:
 
 
 def int_to_n(i: int) -> int:
-    "Maps the input integer (-inf to inf range) onto a natural number (0 to inf range)"
+    """Maps the input integer onto a natural number by mapping positive integers onto even natural numbers and negative integers onto odd natural numbers."""
     if i < 0:
         return -2*i - 1
     else:
         return 2*i
 
 def n_to_int(n: int) -> int:
-    "Maps the input natural number onto an integer. Is the inverse function of int_to_n()."
+    """Maps the input natural number onto an integer. n_to_int() the inverse function of int_to_n()."""
     if n < 0:
         raise ValueError("Input must be a natural number (nonnegative integer)")
     if n%2 == 0:
@@ -103,5 +108,6 @@ def n_to_int(n: int) -> int:
 
 
 def int_index(t: Sequence[int])  -> int:
+    """Extends index() to apply to tuples of integers by composing index() with int_to_n()"""
     return index( (int_to_n(i) for i in t) )
 
