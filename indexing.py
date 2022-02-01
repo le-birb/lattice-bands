@@ -113,5 +113,5 @@ def int_index(t: Sequence[int])  -> int:
 
 def inv_int_index(n: int, dim: int) -> tuple[int, ...]:
     """This function is the inverse of int_index() with an input of length dim"""
-    return (n_to_int(m) for m in inv_index(n, dim))
+    return tuple(n_to_int(m) for m in inv_index(n, dim))
 
