@@ -31,6 +31,8 @@ def index(t: Sequence[int]) -> int:
             return _index2(t)
         case 3:
             return _index3(t)
+        case 0:
+            raise ValueError("Index not meaningful for 0-length inputs")
         case _:
             raise ValueError(f"index not implemented for inputs of length {len(t)}")
 
