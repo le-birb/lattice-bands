@@ -11,6 +11,7 @@ import matplotlib
 
 from json_interface import load_lattice
 import empty_lattice
+import central_equation
 
 # tell matplotlib to use TkAgg so we can show plots on tkinter windows
 matplotlib.use("TkAgg")
@@ -93,11 +94,11 @@ def plot_bands():
 go_button = ttk.Button(interfaceframe, text = "Plot bands", command = plot_bands)
 go_button.grid(column = 0, row = 20)
 
-band_fig = Figure()
+fig = Figure()
 
-band_axes = band_fig.add_subplot()
+band_axes = fig.add_subplot()
 
-canvas = FigureCanvasTkAgg(band_fig, master = mainframe)
+canvas = FigureCanvasTkAgg(fig, master = mainframe)
 canvas.get_tk_widget().grid(column = 0, row = 0, sticky = "NESW")
 
 root.mainloop()
