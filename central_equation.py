@@ -57,7 +57,8 @@ if __name__ == "__main__":
         def __init__(self, scale: Number = 1, dimension = 2):
             super().__init__()
             self.scale = scale
-            self.dimension = 2
+            self.dimension = dimension
+
         def __getitem__(self, idx):
             x, y = inv_index(idx, self.dimension)
             if x == y == 0:
