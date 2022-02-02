@@ -44,8 +44,9 @@ lattice.set("2d_square")
 file_menu = ttk.OptionMenu(interfaceframe, lattice, lattice.get(), *json_files)
 file_menu.grid(column = 0, row = 1, sticky = "N")
 
+# TODO: add checks elsewhere to ensure empty inputs are handled gracefully
 def _validate_num(text: str):
-    return text.isdigit()
+    return text.isdigit() or text == ""
 
 class num_entry(ttk.Entry):
     def __init__(self, *args, **kwargs):
