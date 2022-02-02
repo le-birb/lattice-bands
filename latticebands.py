@@ -29,6 +29,9 @@ interfaceframe.grid(column = 1, row = 0, sticky = "NESW")
 interfaceframe.rowconfigure(0, weight = 1)
 interfaceframe.rowconfigure(1, weight = 1)
 
+lattice_label = ttk.Label(interfaceframe, text = "Select lattice to use:")
+lattice_label.grid(column = 0, row = 0, sticky = "S")
+
 files: list[str] = os.listdir("lattices")
 json_files = []
 
@@ -39,7 +42,7 @@ for filename in files:
 lattice = tk.StringVar()
 lattice.set("2d_square")
 file_menu = ttk.OptionMenu(interfaceframe, lattice, lattice.get(), *json_files)
-file_menu.grid(column = 0, row = 1)
+file_menu.grid(column = 0, row = 1, sticky = "N")
 
 def _validate_num(text: str):
     return text.isdigit()
