@@ -22,19 +22,18 @@ def get_energies(k, band_count, fourier_coefficients: Callable):
     l = 1
 
     matrix = np.zeros((band_count, band_count))
-    for row in range(len(matrix)): 
-        for column in range(len(matrix[0])):
-            # with vector indices, the (a,b)th entry in the matrix is U[a-b], remembering that a and b are vectors
-            # when a = b, there is an additional h^2/2m * (k + b)^2 term added in
-            a = np.array(inv_index(row, len(k)))
-            b = np.array(inv_index(column, len(k)))
-            try:
-                matrix[row, column] = fourier_coefficients(a - b)
-            except IndexError:
-                pass # an index error means the fourier coefficient is outside the defined set, so we assume it is 0
+    for row, column in np.ndindex(matrix.shape):
+        # with vector indices, the (a,b)th entry in the matrix is U[a-b], remembering that a and b are vectors
+        # when a = b, there is an additional h^2/2m * (k + b)^2 term added in
+        a = np.array(inv_index(row, len(k)))
+        b = np.array(inv_index(column, len(k)))
+        try:
+            matrix[row, column] = fourier_coefficients(a - b)
+        except IndexError:
+            pass # an index error means the fourier coefficient is outside the defined set, so we assume it is 0
 
-            if all(a == b):
-                matrix[row, column] += l * np.dot(k + b, k + b)
+        if all(a == b):
+            matrix[row, column] += l * np.dot(k + b, k + b)
     return np.linalg.eigvals(matrix)
 
 
