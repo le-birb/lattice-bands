@@ -1,17 +1,22 @@
 
 from __future__ import annotations
+from itertools import chain
 
 import tkinter as tk
-from tkinter import ttk, filedialog
+from tkinter import ttk
 import os
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+from matplotlib.axes import Axes
 import matplotlib
 
+import numpy as np
+
 from json_interface import load_lattice
-import empty_lattice
 import central_equation
+
+import potentials
 
 # tell matplotlib to use TkAgg so we can show plots on tkinter windows
 matplotlib.use("TkAgg")
@@ -80,9 +85,33 @@ density_plot_checkbox.grid(column = 0, row = 15)
 def plot_bands():
     band_axes.clear()
 
-    lattice_path = f"lattices/{lattice.get()}.json"
-    lat = load_lattice(lattice_path)
-    empty_lattice.plot_bands(lat, band_axes, reciprocal_range = int(range_var.get()), resolution = int(resolution_var.get()))
+    lattice_filepath = f"lattices/{lattice.get()}.json"
+    lat = load_lattice(lattice_filepath)
+
+    for point in lat.vertical_lines:
+        band_axes.axvline(point, linestyle = "--", color = (.5, .5, .5, .5))
+
+    try:
+        reciprocal_range = int(range_var.get())
+        resolution = int(resolution_var.get())
+    except ValueError:
+        # TODO: pop up a thing
+        return
+
+    band_paths = lat.get_paths(resolution)
+    plot_ranges = []
+    for i in range(len(band_paths)):
+        plot_ranges.append(np.linspace(i, i+1, resolution))
+    
+    path = np.array(list(chain.from_iterable(band_paths)))
+    plot_space = np.array(list(chain.from_iterable(plot_ranges)))
+
+    band_count = (2*reciprocal_range + 1)**2
+
+    # TODO: allow selecting the potential to use
+    energy_bands = central_equation.get_bands(path, potentials.empty_v, band_count)
+    for band in energy_bands:
+        band_axes.plot(plot_space, band)
 
     band_axes.set_xlabel("High Symmetry Points")
     band_axes.set_xticks(list(range(len(lat.points))))
@@ -96,7 +125,7 @@ go_button.grid(column = 0, row = 20)
 
 fig = Figure()
 
-band_axes = fig.add_subplot()
+band_axes: Axes = fig.add_subplot()
 
 canvas = FigureCanvasTkAgg(fig, master = mainframe)
 canvas.get_tk_widget().grid(column = 0, row = 0, sticky = "NESW")
