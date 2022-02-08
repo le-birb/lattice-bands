@@ -43,7 +43,7 @@ def index(t: Sequence[int]) -> int:
 
 def _inv_index2(n: int) -> tuple[int, int]:
     s = isqrt(n)
-    if a := n - s*s < s:
+    if (a := n - s*s) < s:
         b = s
     else:
         a, b = s, n - s*s - s
@@ -102,9 +102,9 @@ def n_to_int(n: int) -> int:
     if n < 0:
         raise ValueError("Input must be a natural number (nonnegative integer)")
     if n%2 == 0:
-        return n/2
+        return n//2
     else:
-        return -(n-1)/2
+        return -(n+1)//2
 
 
 def int_index(t: Sequence[int])  -> int:
