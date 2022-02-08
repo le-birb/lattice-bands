@@ -27,10 +27,8 @@ def get_energies(k, band_count, fourier_coefficients: Callable):
         # when a = b, there is an additional h^2/2m * (k + b)^2 term added in
         a = np.array(inv_index(row, len(k)))
         b = np.array(inv_index(column, len(k)))
-        try:
-            matrix[row, column] = fourier_coefficients(a - b)
-        except IndexError:
-            pass # an index error means the fourier coefficient is outside the defined set, so we assume it is 0
+        
+        matrix[row, column] = fourier_coefficients(a - b)
 
         if all(a == b):
             matrix[row, column] += l * np.dot(k + b, k + b)
