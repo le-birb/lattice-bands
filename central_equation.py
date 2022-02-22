@@ -2,7 +2,7 @@
 from __future__ import annotations
 from functools import partial
 
-from itertools import product, tee
+from itertools import chain, product, repeat, tee
 from numbers import Number
 from typing import Callable
 
@@ -22,13 +22,29 @@ def get_energies(k, band_count, fourier_coefficients: Callable):
     l = 1
 
     matrix = np.zeros((band_count, band_count))
+
+    # before calculaating matrix entries, figure out a bound below which matrix terms should be thrown out
+    cutoff = 0
+
+    # row_ends = zip(range(matrix.shape[0]), repeat(matrix.shape[1]))
+    # col_ends = zip(repeat(matrix.shape[0]), range(matrix.shape[1]))
+    # for row, column in chain(row_ends, col_ends):
+    #     a = np.array(inv_index(row, len(k)))
+    #     b = np.array(inv_index(column, len(k)))
+    #     u = fourier_coefficients(a - b)
+    #     print(a, b, u)
+    #     if u > cutoff:
+    #         cutoff = u
+
+
     for row, column in np.ndindex(matrix.shape):
         # with vector indices, the (a,b)th entry in the matrix is U[a-b], remembering that a and b are vectors
         # when a = b, there is an additional h^2/2m * (k + b)^2 term added in
         a = np.array(inv_index(row, len(k)))
         b = np.array(inv_index(column, len(k)))
-        
-        matrix[row, column] = fourier_coefficients(a - b)
+        u = fourier_coefficients(a - b)
+        if u >= cutoff:
+            matrix[row, column] = u
 
         if all(a == b):
             matrix[row, column] += l * np.dot(k + b, k + b)
@@ -76,7 +92,7 @@ if __name__ == "__main__":
     for point in lat.vertical_lines:
         p.axvline(point, linestyle = "--", color = (.5, .5, .5, .5))
 
-    vt = partial(typical_v, scale = 10)
+    vt = partial(typical_v, scale = 1)
 
     band_count = 9
 
