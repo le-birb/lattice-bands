@@ -129,5 +129,8 @@ band_axes: Axes = fig.add_subplot()
 
 canvas = FigureCanvasTkAgg(fig, master = mainframe)
 canvas.get_tk_widget().grid(column = 0, row = 0, sticky = "NESW")
+# make the canvas resize with the window
+mainframe.rowconfigure(0, weight = 1)
+mainframe.columnconfigure(0, weight = 1)
 
 root.mainloop()
