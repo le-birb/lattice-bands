@@ -1,5 +1,6 @@
 
 from __future__ import annotations
+import functools
 from itertools import chain
 
 import tkinter as tk
@@ -108,8 +109,10 @@ def plot_bands():
 
     band_count = (2*reciprocal_range + 1)**2
 
+    V = functools.partial(potentials.typical_v, scale = 2)
+
     # TODO: allow selecting the potential to use
-    energy_bands = central_equation.get_bands(path, potentials.empty_v, band_count)
+    energy_bands = central_equation.get_bands(path, V, band_count)
     for band in energy_bands:
         band_axes.plot(plot_space, band)
 
