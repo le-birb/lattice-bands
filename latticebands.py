@@ -27,7 +27,7 @@ root.title("Lattice Bands")
 mainframe = ttk.Frame(root, padding = "12")
 mainframe.grid(column = 0, row = 0, sticky = "NESW")
 root.columnconfigure(0, weight = 2)
-root.columnconfigure(1, weight = 1)
+# root.columnconfigure(1, weight = 1)
 root.rowconfigure(0, weight = 1)
 
 interfaceframe = ttk.Frame(mainframe, padding = 10)
