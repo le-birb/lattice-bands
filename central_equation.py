@@ -51,7 +51,7 @@ def get_energies(k, band_count, fourier_coefficients: Callable):
     return np.linalg.eigvals(matrix)
 
 
-def get_bands(path, fourier_coefficients: Callable, band_count: int = 9) -> list:
+def get_bands(path, fourier_coefficients: Callable, band_count: int = 9) -> list[np.ndarray]:
     energy_bands = []
     for i in range(band_count):
         energy_bands.append(np.zeros(len(path)))
