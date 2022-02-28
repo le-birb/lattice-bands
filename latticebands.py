@@ -125,7 +125,12 @@ go_button.grid(column = 0, row = 20)
 
 fig = Figure()
 
-band_axes: Axes = fig.add_subplot()
+# define a gridspec for the displayed subplots, giving more room to the bands than the density plot
+grid_spec = \
+{
+    "width_ratios": (3, 1)
+}
+band_axes, density_axes = fig.subplots(1, 2, sharey = True, gridspec_kw = grid_spec)
 
 canvas = FigureCanvasTkAgg(fig, master = mainframe)
 canvas.get_tk_widget().grid(column = 0, row = 0, sticky = "NESW")
