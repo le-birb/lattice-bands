@@ -131,7 +131,8 @@ fig = Figure()
 # define a gridspec for the displayed subplots, giving more room to the bands than the density plot
 grid_spec = \
 {
-    "width_ratios": (3, 1)
+    "width_ratios": (3, 1),
+    "wspace": .05
 }
 band_axes, density_axes = fig.subplots(1, 2, sharey = True, gridspec_kw = grid_spec)
 
