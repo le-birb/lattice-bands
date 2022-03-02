@@ -28,7 +28,10 @@ def plot_densities(bands: list[np.ndarray], ax: Axes):
         bin = floor( (energy - lowest_bin_value) / bin_size )
         counts[bin] += 1
 
-    ax.plot(counts, bins)
+    total = sum(counts)
+    density = counts/total
+
+    ax.plot(density, bins)
 
 
 # plot_densities([np.array([0, 20, 77, 5, 5.1])], None)
