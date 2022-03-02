@@ -18,6 +18,7 @@ from json_interface import load_lattice
 import central_equation
 
 import potentials
+from density import plot_densities
 
 # tell matplotlib to use TkAgg so we can show plots on tkinter windows
 matplotlib.use("TkAgg")
@@ -75,16 +76,17 @@ resolution_var = tk.StringVar(value = "50")
 resolution_entry = num_entry(interfaceframe, textvariable = resolution_var)
 resolution_entry.grid(column = 0, row = 10)
 
-density_label = ttk.Label(interfaceframe, text = "Make density of states diagram (doesn't work yet):", wraplength = 150)
-density_label.grid(column = 0, row = 14)
+# density_label = ttk.Label(interfaceframe, text = "Make density of states diagram (doesn't work yet):", wraplength = 150)
+# density_label.grid(column = 0, row = 14)
 
-make_density_plot = tk.BooleanVar(value = False)
-density_plot_checkbox = ttk.Checkbutton(interfaceframe, variable = make_density_plot)
-density_plot_checkbox.grid(column = 0, row = 15)
+# make_density_plot = tk.BooleanVar(value = False)
+# density_plot_checkbox = ttk.Checkbutton(interfaceframe, variable = make_density_plot)
+# density_plot_checkbox.grid(column = 0, row = 15)
 
 
 def plot_bands():
     band_axes.clear()
+    density_axes.clear()
 
     lattice_filepath = f"lattices/{lattice.get()}.json"
     lat = load_lattice(lattice_filepath)
@@ -120,6 +122,8 @@ def plot_bands():
     band_axes.set_xticks(list(range(len(lat.points))))
     band_axes.set_xticklabels(lat.point_names)
     band_axes.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
+
+    plot_densities(energy_bands, density_axes)
 
     canvas.draw()
 
