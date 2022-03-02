@@ -24,7 +24,8 @@ def plot_densities(bands: list[np.ndarray], ax: Axes):
     for energy in energies:
         # overriding builtin bin() for getting binary integers; shouldn't cause issues
         # don't multiply by bin_size since we want an index in counts, not the actual bin value
-        bin = floor( energy / bin_size )
+        # subtracting lowest_bin_value makes sure that the lowest bin always has index 0
+        bin = floor( (energy - lowest_bin_value) / bin_size )
         counts[bin] += 1
 
     ax.plot(counts, bins)
