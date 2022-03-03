@@ -43,6 +43,7 @@ lattice_label.grid(column = 0, row = 0, sticky = "S")
 files: list[str] = os.listdir("lattices")
 json_files = []
 
+# TODO: add a name field to the json and load from that?
 for filename in files:
     if filename.endswith(".json"):
         json_files.append(filename[:-5])
