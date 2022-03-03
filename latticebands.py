@@ -125,6 +125,10 @@ def plot_bands():
 
     plot_densities(energy_bands, density_axes)
 
+    density_axes.set_xlabel("Density")
+    density_axes.set_xlim(left = 0)
+    # density_axes.axvline(0, color = "k", linewidth = .75)
+
     canvas.draw()
 
 go_button = ttk.Button(interfaceframe, text = "Plot bands", command = plot_bands)
