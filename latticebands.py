@@ -132,6 +132,9 @@ go_button.grid(column = 0, row = 20)
 
 fig = Figure()
 
+band_axes: Axes
+density_axes: Axes
+
 # define a gridspec for the displayed subplots, giving more room to the bands than the density plot
 grid_spec = \
 {
