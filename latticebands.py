@@ -139,9 +139,13 @@ density_axes: Axes
 grid_spec = \
 {
     "width_ratios": (3, 1),
-    "wspace": .05
+    "wspace": .0,
 }
-band_axes, density_axes = fig.subplots(1, 2, sharey = True, gridspec_kw = grid_spec)
+sub_opts = \
+{
+    "xticklabels": [],
+}
+band_axes, density_axes = fig.subplots(1, 2, sharey = True, gridspec_kw = grid_spec, subplot_kw = sub_opts)
 
 canvas = FigureCanvasTkAgg(fig, master = mainframe)
 canvas.get_tk_widget().grid(column = 0, row = 0, sticky = "NESW")
