@@ -74,6 +74,22 @@ file_menu.grid(column = 0, row = 1, sticky = "N")
 def _validate_num(text: str):
     return text.isdigit() or text == ""
 
+class IntString(tk.StringVar):
+    """
+    Wrapper for tk.StringVar for use with num_entry.
+    Allows entry as a string but ensures and integer value.
+    """
+    def __init__(self, *args, default: int = 0, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._default = default
+
+    def get(self) -> int:
+        tempval = super().get()
+        if tempval == "":
+            return self._default
+        else:
+            return int(tempval)
+
 class num_entry(ttk.Entry):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -117,14 +133,14 @@ class potential_entry(ttk.Frame):
 range_label = ttk.Label(interfaceframe, text = "Nearest neigbors to visit:")
 range_label.grid(column = 0, row = 7)
 
-range_var = tk.StringVar(value = "1")
+range_var = IntString(value = "1", default = 1)
 range_entry = num_entry(interfaceframe, textvariable = range_var)
 range_entry.grid(column = 0, row = 8)
 
 resolution_label = ttk.Label(interfaceframe, text = "Resolution of plot (higher is better but slower):", wraplength = 150)
 resolution_label.grid(column = 0, row = 9)
 
-resolution_var = tk.StringVar(value = "50")
+resolution_var = IntString(value = "50", default = 50)
 resolution_entry = num_entry(interfaceframe, textvariable = resolution_var)
 resolution_entry.grid(column = 0, row = 10)
 
@@ -158,8 +174,8 @@ def plot_bands():
         band_axes.axvline(point, linestyle = "--", color = (.5, .5, .5, .5))
 
     try:
-        reciprocal_range = int(range_var.get())
-        resolution = int(resolution_var.get())
+        reciprocal_range = range_var.get()
+        resolution = resolution_var.get()
     except ValueError:
         # TODO: pop up a thing or see todo above _validate_num
         return
