@@ -3,7 +3,8 @@
 from typing import Sequence
 
 
-def empty_v(g: Sequence[int]):
+# let it take a dummy scale argument to simplify potential settings implementation elsewhere for the moment
+def empty_v(g: Sequence[int], scale: float):
     """The potential that is 0 everywhere"""
     return 0
 
