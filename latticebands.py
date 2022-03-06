@@ -23,6 +23,10 @@ from density import plot_densities
 # tell matplotlib to use TkAgg so we can show plots on tkinter windows
 matplotlib.use("TkAgg")
 
+
+#####################################################################################################
+# set up whole window
+
 root = tk.Tk()
 root.title("Lattice Bands")
 
@@ -36,6 +40,11 @@ interfaceframe = ttk.Frame(mainframe, padding = 10)
 interfaceframe.grid(column = 1, row = 0, sticky = "NESW")
 interfaceframe.rowconfigure(0, weight = 1)
 interfaceframe.rowconfigure(1, weight = 1)
+
+
+
+#####################################################################################################
+# lattice selector
 
 lattice_label = ttk.Label(interfaceframe, text = "Select lattice to use:")
 lattice_label.grid(column = 0, row = 0, sticky = "S")
@@ -52,6 +61,12 @@ lattice = tk.StringVar()
 lattice.set("2d_square")
 file_menu = ttk.OptionMenu(interfaceframe, lattice, lattice.get(), *json_files)
 file_menu.grid(column = 0, row = 1, sticky = "N")
+
+
+
+
+#####################################################################################################
+# the number entry boxes - range and resolution
 
 # TODO: add checks elsewhere to ensure empty inputs are handled gracefully
 # else subclass StringVar to make a NumString or so which will default to 0 or something else
@@ -78,6 +93,12 @@ resolution_var = tk.StringVar(value = "50")
 resolution_entry = num_entry(interfaceframe, textvariable = resolution_var)
 resolution_entry.grid(column = 0, row = 10)
 
+
+
+#####################################################################################################
+# add density of states checkbox
+# TODO: decide whether or not to even use this
+
 # density_label = ttk.Label(interfaceframe, text = "Make density of states diagram (doesn't work yet):", wraplength = 150)
 # density_label.grid(column = 0, row = 14)
 
@@ -85,6 +106,11 @@ resolution_entry.grid(column = 0, row = 10)
 # density_plot_checkbox = ttk.Checkbutton(interfaceframe, variable = make_density_plot)
 # density_plot_checkbox.grid(column = 0, row = 15)
 
+
+
+#####################################################################################################
+# setting up the go button and plotting function
+# TODO: move some of these algorithm details to their own function or maybe even module
 
 def plot_bands():
     band_axes.clear()
@@ -135,6 +161,12 @@ def plot_bands():
 
 go_button = ttk.Button(interfaceframe, text = "Plot bands", command = plot_bands)
 go_button.grid(column = 0, row = 20)
+
+
+
+
+#####################################################################################################
+# setting up the matplotlib canvas
 
 fig = Figure()
 
