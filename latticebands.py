@@ -77,6 +77,7 @@ class num_entry(ttk.Entry):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         validator = self.register(_validate_num)
+        # this is the incantaion I found to make text validation work
         self.config(validate = "key", validatecommand = (validator, '%P'))
 
 
