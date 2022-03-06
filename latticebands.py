@@ -66,7 +66,7 @@ file_menu.grid(column = 0, row = 1, sticky = "N")
 
 
 #####################################################################################################
-# the number entry boxes - range and resolution
+# define number entry boxes
 
 # TODO: add checks elsewhere to ensure empty inputs are handled gracefully
 # else subclass StringVar to make a NumString or so which will default to 0 or something else
@@ -78,6 +78,17 @@ class num_entry(ttk.Entry):
         super().__init__(*args, **kwargs)
         validator = self.register(_validate_num)
         self.config(validate = "key", validatecommand = (validator, '%P'))
+
+
+#####################################################################################################
+# potential selector
+
+
+
+
+
+#####################################################################################################
+# plot parameters - resolution and range
 
 range_label = ttk.Label(interfaceframe, text = "Nearest neigbors to visit:")
 range_label.grid(column = 0, row = 7)
