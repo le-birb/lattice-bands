@@ -9,7 +9,7 @@ def empty_v(g: Sequence[int], scale: float):
     return 0
 
 def simple_v(g: Sequence[int], scale: float = 1):
-    """A very simple potential where 
+    """A very simple potential where e.g. in 2 dimensions
     U(1,0) == U(0,1) == U(-1,0) == U(0,-1) == 1, 
     and U == 0 otherwise."""
     return sum(map(lambda x: abs(x) == 1, g)) == 1
