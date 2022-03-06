@@ -69,8 +69,6 @@ file_menu.grid(column = 0, row = 1, sticky = "N")
 #####################################################################################################
 # define number entry boxes
 
-# TODO: add checks elsewhere to ensure empty inputs are handled gracefully
-# else subclass StringVar to make a NumString or so which will default to 0 or something else
 def _validate_num(text: str):
     return text.isdigit() or text == ""
 
@@ -173,12 +171,8 @@ def plot_bands():
     for point in lat.vertical_lines:
         band_axes.axvline(point, linestyle = "--", color = (.5, .5, .5, .5))
 
-    try:
-        reciprocal_range = range_var.get()
-        resolution = resolution_var.get()
-    except ValueError:
-        # TODO: pop up a thing or see todo above _validate_num
-        return
+    reciprocal_range = range_var.get()
+    resolution = resolution_var.get()
 
     band_paths = lat.get_paths(resolution)
     plot_ranges = []
