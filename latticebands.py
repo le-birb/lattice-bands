@@ -126,7 +126,7 @@ def plot_bands():
         reciprocal_range = int(range_var.get())
         resolution = int(resolution_var.get())
     except ValueError:
-        # TODO: pop up a thing
+        # TODO: pop up a thing or see todo above _validate_num
         return
 
     band_paths = lat.get_paths(resolution)
