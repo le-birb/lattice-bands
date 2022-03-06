@@ -12,7 +12,8 @@ def simple_v(g: Sequence[int], scale: float = 1):
     """A very simple potential where e.g. in 2 dimensions
     U(1,0) == U(0,1) == U(-1,0) == U(0,-1) == 1, 
     and U == 0 otherwise."""
-    return sum(map(lambda x: abs(x) == 1, g)) == 1
+    # U is scale if exactly one element of g is 1 or -1 and everything else is 0, otherwise it is 0
+    return scale if (g.count(1) == 1 or g.count(-1) == 1) and (g.count(0) == len(g) - 1) else 0
 
 def typical_v(g: Sequence[int], scale: float= 1):
     """A lattice potential that is in some sense "typical":
