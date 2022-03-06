@@ -54,6 +54,7 @@ file_menu = ttk.OptionMenu(interfaceframe, lattice, lattice.get(), *json_files)
 file_menu.grid(column = 0, row = 1, sticky = "N")
 
 # TODO: add checks elsewhere to ensure empty inputs are handled gracefully
+# else subclass StringVar to make a NumString or so which will default to 0 or something else
 def _validate_num(text: str):
     return text.isdigit() or text == ""
 
