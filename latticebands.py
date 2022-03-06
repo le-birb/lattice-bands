@@ -6,6 +6,7 @@ from itertools import chain
 import tkinter as tk
 from tkinter import ttk
 import os
+from typing import Callable
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -84,9 +85,31 @@ class num_entry(ttk.Entry):
 #####################################################################################################
 # potential selector
 
+potential_frame = ttk.Frame(interfaceframe)
+potential_frame.grid(column = 0, row = 5)
 
+add_potential_buton = ttk.Button(potential_frame, text = "Add potential to plot")
+add_potential_buton.grid(column = 0, row = 0)
 
+class potential_entry(ttk.Frame):
+    """GUI element for displaying and editing parameters of 
+    potenitals being plotted, as well as plotting styles.
+    """
+    def __init__(self, *args, func: Callable, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.func = func
+        self.label = ttk.Label(self, text = func.__name__)
+        self.label.grid(column = 0)
 
+        self.scale_label = ttk.Label(self, text = "strength:")
+        self.scale_label.grid(column = 1, sticky = "E")
+
+        self.scale_var = tk.StringVar(value = "1")
+        self.scale_entry = num_entry(self, textvariable = self.scale_var)
+        self.scale_entry.grid(column = 2, sticky = "W")
+
+    def get_potential(self):
+        return functools.partial(self.func, scale = int(self.scale_var.get()))
 
 #####################################################################################################
 # plot parameters - resolution and range
