@@ -120,7 +120,7 @@ class potential_entry(ttk.Frame):
         self.scale_label = ttk.Label(self, text = "strength:")
         self.scale_label.grid(column = 1, sticky = "E")
 
-        self.scale_var = tk.StringVar(value = "1")
+        self.scale_var = IntString(value = "1", default = 1)
         self.scale_entry = num_entry(self, textvariable = self.scale_var)
         self.scale_entry.grid(column = 2, sticky = "W")
 
