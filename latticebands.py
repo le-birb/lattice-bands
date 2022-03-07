@@ -105,15 +105,21 @@ potential_frame.grid(column = 0, row = 5)
 add_potential_buton = ttk.Button(potential_frame, text = "Add potential to plot")
 add_potential_buton.grid(column = 0, row = 0)
 
+potential_map = \
+{
+    "Empty": potentials.empty_v,
+    "Simple": potentials.simple_v,
+    "Quadratic": potentials.typical_v,
+}
 class potential_entry(ttk.Frame):
     """GUI element for displaying and editing parameters of 
     potenitals being plotted, as well as plotting styles.
     """
     def __init__(self, *args, func: Callable, **kwargs):
         super().__init__(*args, **kwargs)
-        self.func = func
-        self.label = ttk.Label(self, text = func.__name__)
-        self.label.grid(column = 0)
+        self.potential_name = tk.StringVar(value = "Empty")
+        self.potential_selector = ttk.Combobox(self, state = "readonly", values = potential_map.keys())
+        self.potential_selector.grid(column = 0)
 
         self.scale_label = ttk.Label(self, text = "strength:")
         self.scale_label.grid(column = 1, sticky = "E")
@@ -123,7 +129,10 @@ class potential_entry(ttk.Frame):
         self.scale_entry.grid(column = 2, sticky = "W")
 
     def get_potential(self):
-        return functools.partial(self.func, scale = int(self.scale_var.get()))
+        return functools.partial(potential_map[self.potential_name.get()], scale = self.scale_var.get())
+
+
+
 
 #####################################################################################################
 # plot parameters - resolution and range
