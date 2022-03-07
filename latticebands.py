@@ -41,6 +41,7 @@ interfaceframe = ttk.Frame(mainframe, padding = 10)
 interfaceframe.grid(column = 1, row = 0, sticky = "NESW")
 interfaceframe.rowconfigure(0, weight = 1)
 interfaceframe.rowconfigure(1, weight = 1)
+interfaceframe.rowconfigure(2, weight = 2)
 
 
 
@@ -100,10 +101,17 @@ class num_entry(ttk.Entry):
 # potential selector
 
 potential_frame = ttk.Frame(interfaceframe)
-potential_frame.grid(column = 0, row = 5, sticky = "N")
+potential_frame.grid(column = 0, row = 2, sticky = "N")
 
-add_potential_buton = ttk.Button(potential_frame, text = "Add potential to plot")
-add_potential_buton.grid(column = 0, row = 0, sticky = "N")
+potentials_to_plot = []
+
+def add_potential():
+    new_pot = potential_entry(potential_frame)
+    new_pot.pack()
+    potentials_to_plot.append(new_pot)
+
+add_potential_buton = ttk.Button(potential_frame, text = "Add potential to plot", command = add_potential)
+add_potential_buton.pack(anchor = "n")
 
 potential_map = \
 {
@@ -128,11 +136,15 @@ class potential_entry(ttk.Frame):
         self.scale_entry = num_entry(self, textvariable = self.scale_var)
         self.scale_entry.grid(column = 2, sticky = "W")
 
+        self.del_btn = ttk.Button(self, command = self.remove)
+        self.del_btn.grid(column = 5, sticky = "E")
+
     def get_potential(self):
         return functools.partial(potential_map[self.potential_name.get()], scale = self.scale_var.get())
 
-
-
+    def remove(self):
+        self.pack_forget()
+        potentials_to_plot.remove(self)
 
 #####################################################################################################
 # plot parameters - resolution and range
