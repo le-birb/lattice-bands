@@ -119,7 +119,7 @@ potential_map = \
     "Simple": potentials.simple_v,
     "Quadratic": potentials.typical_v,
 }
-_max_width = max(len(k) for k in potential_map.keys())
+_max_pot_width = max(len(k) for k in potential_map.keys())
 
 class potential_entry(ttk.Frame):
     """GUI element for displaying and editing parameters of 
@@ -128,7 +128,7 @@ class potential_entry(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.potential_name = tk.StringVar(value = "Empty")
-        self.potential_selector = ttk.Combobox(self, textvariable = self.potential_name, state = "readonly", values = list(potential_map.keys()), width = _max_width)
+        self.potential_selector = ttk.Combobox(self, textvariable = self.potential_name, state = "readonly", values = list(potential_map.keys()), width = _max_pot_width)
         self.potential_selector.current(0)
         self.potential_selector.grid(row =0, column = 0)
 
