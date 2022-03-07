@@ -127,17 +127,17 @@ class potential_entry(ttk.Frame):
         super().__init__(*args, **kwargs)
         self.potential_name = tk.StringVar(value = "Empty")
         self.potential_selector = ttk.Combobox(self, state = "readonly", values = potential_map.keys())
-        self.potential_selector.grid(column = 0)
+        self.potential_selector.grid(row =0, column = 0)
 
         self.scale_label = ttk.Label(self, text = "strength:")
-        self.scale_label.grid(column = 1, sticky = "E")
+        self.scale_label.grid(row = 0, column = 1, sticky = "E")
 
         self.scale_var = IntString(value = "1", default = 1)
         self.scale_entry = num_entry(self, textvariable = self.scale_var)
-        self.scale_entry.grid(column = 2, sticky = "W")
+        self.scale_entry.grid(row = 0, column = 2, sticky = "W")
 
         self.del_btn = ttk.Button(self, command = self.remove)
-        self.del_btn.grid(column = 5, sticky = "E")
+        self.del_btn.grid(row = 0, column = 5, sticky = "E")
 
     def get_potential(self):
         return functools.partial(potential_map[self.potential_name.get()], scale = self.scale_var.get())
