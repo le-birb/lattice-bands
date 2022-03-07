@@ -173,12 +173,23 @@ class potential_entry(ttk.Frame):
         self.color_selector = ttk.Combobox(self, textvariable = self.linecolor, state = "readonly", values = colors, width = _max_color_width)
         self.color_selector.grid(row = 1, column = 3)
 
+        # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
+        # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
         self.linealpha = IntString(value = "255", default = 255)
         self.alpha_entry = num_entry(self, textvariable = self.linealpha, width = 4)
         self.alpha_entry.grid(row = 1, column = 5)
 
     def get_potential(self):
         return functools.partial(potential_map[self.potential_name.get()], scale = self.scale_var.get())
+
+    def get_line_style(self):
+        return line_styles_map[self.linestyle.get()]
+
+    def get_line_color(self):
+        return self.linecolor.get()
+
+    def get_line_alpha(self):
+        return self.linealpha.get() / 255
 
     def remove(self):
         self.pack_forget()
