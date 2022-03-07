@@ -202,14 +202,14 @@ class potential_entry(ttk.Frame):
 #####################################################################################################
 # plot parameters - resolution and range
 
-range_label = ttk.Label(interfaceframe, text = "Nearest neigbors to visit:")
+range_label = ttk.Label(interfaceframe, text = "Number of bands to plot:")
 range_label.grid(column = 0, row = 7)
 
-range_var = IntString(value = "1", default = 1)
+range_var = IntString(value = "9", default = 9)
 range_entry = num_entry(interfaceframe, textvariable = range_var)
 range_entry.grid(column = 0, row = 8)
 
-resolution_label = ttk.Label(interfaceframe, text = "Resolution of plot (higher is better but slower):", wraplength = 150)
+resolution_label = ttk.Label(interfaceframe, text = "Resolution of plot (sample rate between symmetry points):", wraplength = 150)
 resolution_label.grid(column = 0, row = 9)
 
 resolution_var = IntString(value = "50", default = 50)
@@ -231,7 +231,7 @@ def plot_bands():
     for point in lat.vertical_lines:
         band_axes.axvline(point, linestyle = "--", color = (.5, .5, .5, .5))
 
-    reciprocal_range = range_var.get()
+    band_count = range_var.get()
     resolution = resolution_var.get()
 
     band_paths = lat.get_paths(resolution)
@@ -241,8 +241,6 @@ def plot_bands():
     
     path = np.array(list(chain.from_iterable(band_paths)))
     plot_space = np.array(list(chain.from_iterable(plot_ranges)))
-
-    band_count = (2*reciprocal_range + 1)**2
 
     for entry in potentials_to_plot:
         potential = entry.get_potential()
