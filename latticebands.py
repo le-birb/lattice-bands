@@ -107,11 +107,11 @@ potentials_to_plot = []
 
 def add_potential():
     new_pot = potential_entry(potential_frame)
-    new_pot.pack()
+    new_pot.pack(pady = (0, 10))
     potentials_to_plot.append(new_pot)
 
 add_potential_buton = ttk.Button(potential_frame, text = "Add potential to plot", command = add_potential)
-add_potential_buton.pack(anchor = "n")
+add_potential_buton.pack(anchor = "n", pady = (0, 10))
 
 potential_map = \
 {
