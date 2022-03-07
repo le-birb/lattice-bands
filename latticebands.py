@@ -199,6 +199,9 @@ class potential_entry(ttk.Frame):
         self.pack_forget()
         potentials_to_plot.remove(self)
 
+# have something be plotted by default at least
+add_potential()
+
 #####################################################################################################
 # plot parameters - resolution and range
 
