@@ -100,10 +100,10 @@ class num_entry(ttk.Entry):
 # potential selector
 
 potential_frame = ttk.Frame(interfaceframe)
-potential_frame.grid(column = 0, row = 5)
+potential_frame.grid(column = 0, row = 5, sticky = "N")
 
 add_potential_buton = ttk.Button(potential_frame, text = "Add potential to plot")
-add_potential_buton.grid(column = 0, row = 0)
+add_potential_buton.grid(column = 0, row = 0, sticky = "N")
 
 potential_map = \
 {
