@@ -11,6 +11,7 @@ from typing import Callable
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
+from matplotlib.colors import to_rgba
 import matplotlib
 
 import numpy as np
@@ -103,7 +104,7 @@ class num_entry(ttk.Entry):
 potential_frame = ttk.Frame(interfaceframe)
 potential_frame.grid(column = 0, row = 2, sticky = "N")
 
-potentials_to_plot = []
+potentials_to_plot: list[potential_entry] = []
 
 def add_potential():
     new_pot = potential_entry(potential_frame)
@@ -174,7 +175,6 @@ class potential_entry(ttk.Frame):
         self.color_selector.grid(row = 1, column = 3)
 
         # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
-        # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
         self.linealpha = IntString(value = "255", default = 255)
         self.alpha_entry = num_entry(self, textvariable = self.linealpha, width = 4)
         self.alpha_entry.grid(row = 1, column = 5)
@@ -229,7 +229,7 @@ resolution_entry.grid(column = 0, row = 10)
 
 #####################################################################################################
 # setting up the go button and plotting function
-# TODO: move some of these algorithm details to their own function or maybe even module
+# TODO: look into move some of these algorithm details to their own function or maybe even module
 
 def plot_bands():
     band_axes.clear()
@@ -254,12 +254,16 @@ def plot_bands():
 
     band_count = (2*reciprocal_range + 1)**2
 
-    V = functools.partial(potentials.typical_v, scale = 2)
+    for entry in potentials_to_plot:
+        potential = entry.get_potential()
+    
+        style_params = {}
+        style_params.update(linestyle = entry.get_line_style())
+        style_params.update(color = to_rgba(entry.get_line_color(), entry.get_line_alpha()))
 
-    # TODO: allow selecting the potential to use
-    energy_bands = central_equation.get_bands(path, V, band_count)
-    for band in energy_bands:
-        band_axes.plot(plot_space, band)
+        energy_bands = central_equation.get_bands(path, potential, band_count)
+        for band in energy_bands:
+            band_axes.plot(plot_space, band, **style_params)
 
     band_axes.set_xlabel("High Symmetry Points")
     band_axes.set_xticks(list(range(len(lat.points))))
