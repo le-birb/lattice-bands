@@ -62,7 +62,7 @@ for filename in files:
 lattice = tk.StringVar()
 lattice.set("2d_square")
 file_menu = ttk.OptionMenu(interfaceframe, lattice, lattice.get(), *json_files)
-file_menu.grid(column = 0, row = 1, sticky = "N")
+file_menu.grid(column = 0, row = 1, sticky = "N", pady = (0, 20))
 
 
 
@@ -121,6 +121,29 @@ potential_map = \
 }
 _max_pot_width = max(len(k) for k in potential_map.keys())
 
+line_styles_map = \
+{
+    "Solid": "-",
+    "Dashed": "--",
+    "Dotted": ":",
+    "Dash-dot": "-."
+}
+_max_line_width = max(len(k) for k in line_styles_map.keys())
+
+colors = \
+[
+    "red",
+    "blue",
+    "green",
+    "black",
+    "grey",
+    "darkred",
+    "darkblue",
+    "darkgreen",
+    "darkgray",
+]
+_max_color_width = max(len(k) for k in colors)
+
 class potential_entry(ttk.Frame):
     """GUI element for displaying and editing parameters of 
     potenitals being plotted, as well as plotting styles.
@@ -130,17 +153,29 @@ class potential_entry(ttk.Frame):
         self.potential_name = tk.StringVar(value = "Empty")
         self.potential_selector = ttk.Combobox(self, textvariable = self.potential_name, state = "readonly", values = list(potential_map.keys()), width = _max_pot_width)
         self.potential_selector.current(0)
-        self.potential_selector.grid(row =0, column = 0)
+        self.potential_selector.grid(row = 0, column = 0, columnspan = 2)
 
         self.scale_label = ttk.Label(self, text = "Strength:")
-        self.scale_label.grid(row = 0, column = 1, sticky = "E", padx = (5, 0))
+        self.scale_label.grid(row = 0, column = 2, columnspan = 2, sticky = "E", padx = (5, 0))
 
         self.scale_var = IntString(value = "1", default = 1)
         self.scale_entry = num_entry(self, textvariable = self.scale_var, width = 4)
-        self.scale_entry.grid(row = 0, column = 2, sticky = "W", padx = (0, 5))
+        self.scale_entry.grid(row = 0, column = 4, columnspan = 2, sticky = "W", padx = (0, 5))
 
         self.del_btn = ttk.Button(self, command = self.remove, text = "Remove", width = 8)
-        self.del_btn.grid(row = 0, column = 5, sticky = "E")
+        self.del_btn.grid(row = 0, column = 10, sticky = "E")
+
+        self.linestyle = tk.StringVar(value = "Solid")
+        self.style_selector = ttk.Combobox(self, textvariable = self.linestyle, state = "readonly", values = list(line_styles_map.keys()), width = _max_line_width)
+        self.style_selector.grid(row = 1, column = 1)
+
+        self.linecolor = tk.StringVar(value = "black")
+        self.color_selector = ttk.Combobox(self, textvariable = self.linecolor, state = "readonly", values = colors, width = _max_color_width)
+        self.color_selector.grid(row = 1, column = 3)
+
+        self.linealpha = IntString(value = "255", default = 255)
+        self.alpha_entry = num_entry(self, textvariable = self.linealpha, width = 4)
+        self.alpha_entry.grid(row = 1, column = 5)
 
     def get_potential(self):
         return functools.partial(potential_map[self.potential_name.get()], scale = self.scale_var.get())
