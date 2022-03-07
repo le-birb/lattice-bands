@@ -115,7 +115,7 @@ class potential_entry(ttk.Frame):
     """GUI element for displaying and editing parameters of 
     potenitals being plotted, as well as plotting styles.
     """
-    def __init__(self, *args, func: Callable, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.potential_name = tk.StringVar(value = "Empty")
         self.potential_selector = ttk.Combobox(self, state = "readonly", values = potential_map.keys())
