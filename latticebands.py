@@ -260,7 +260,8 @@ def plot_bands():
     band_axes.set_xticklabels(lat.point_names)
     band_axes.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
 
-    plot_densities(energy_bands, density_axes)
+    # TODO: see above in potential_entry
+    # plot_densities(energy_bands, density_axes)
 
     density_axes.set_xlabel("Density")
     density_axes.set_xlim(left = 0)
