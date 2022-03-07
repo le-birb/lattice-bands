@@ -213,20 +213,6 @@ resolution_entry = num_entry(interfaceframe, textvariable = resolution_var)
 resolution_entry.grid(column = 0, row = 10)
 
 
-
-#####################################################################################################
-# add density of states checkbox
-# TODO: decide whether or not to even use this
-
-# density_label = ttk.Label(interfaceframe, text = "Make density of states diagram (doesn't work yet):", wraplength = 150)
-# density_label.grid(column = 0, row = 14)
-
-# make_density_plot = tk.BooleanVar(value = False)
-# density_plot_checkbox = ttk.Checkbutton(interfaceframe, variable = make_density_plot)
-# density_plot_checkbox.grid(column = 0, row = 15)
-
-
-
 #####################################################################################################
 # setting up the go button and plotting function
 # TODO: look into moving some of these algorithm details to their own function or maybe even module
