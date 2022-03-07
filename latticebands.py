@@ -39,8 +39,8 @@ root.rowconfigure(0, weight = 1)
 
 interfaceframe = ttk.Frame(mainframe, padding = 10)
 interfaceframe.grid(column = 1, row = 0, sticky = "NESW")
-interfaceframe.rowconfigure(0, weight = 1)
-interfaceframe.rowconfigure(1, weight = 1)
+# interfaceframe.rowconfigure(0, weight = 1)
+# interfaceframe.rowconfigure(1, weight = 1)
 interfaceframe.rowconfigure(2, weight = 2)
 
 
@@ -119,6 +119,8 @@ potential_map = \
     "Simple": potentials.simple_v,
     "Quadratic": potentials.typical_v,
 }
+_max_width = max(len(k) for k in potential_map.keys())
+
 class potential_entry(ttk.Frame):
     """GUI element for displaying and editing parameters of 
     potenitals being plotted, as well as plotting styles.
@@ -126,17 +128,18 @@ class potential_entry(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.potential_name = tk.StringVar(value = "Empty")
-        self.potential_selector = ttk.Combobox(self, state = "readonly", values = potential_map.keys())
+        self.potential_selector = ttk.Combobox(self, textvariable = self.potential_name, state = "readonly", values = list(potential_map.keys()), width = _max_width)
+        self.potential_selector.current(0)
         self.potential_selector.grid(row =0, column = 0)
 
-        self.scale_label = ttk.Label(self, text = "strength:")
-        self.scale_label.grid(row = 0, column = 1, sticky = "E")
+        self.scale_label = ttk.Label(self, text = "Strength:")
+        self.scale_label.grid(row = 0, column = 1, sticky = "E", padx = (5, 0))
 
         self.scale_var = IntString(value = "1", default = 1)
-        self.scale_entry = num_entry(self, textvariable = self.scale_var)
-        self.scale_entry.grid(row = 0, column = 2, sticky = "W")
+        self.scale_entry = num_entry(self, textvariable = self.scale_var, width = 4)
+        self.scale_entry.grid(row = 0, column = 2, sticky = "W", padx = (0, 5))
 
-        self.del_btn = ttk.Button(self, command = self.remove)
+        self.del_btn = ttk.Button(self, command = self.remove, text = "Remove", width = 8)
         self.del_btn.grid(row = 0, column = 5, sticky = "E")
 
     def get_potential(self):
