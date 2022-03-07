@@ -149,6 +149,10 @@ class potential_entry(ttk.Frame):
     """GUI element for displaying and editing parameters of 
     potenitals being plotted, as well as plotting styles.
     """
+    # TODO list:
+    # Add labels for most elements to explain what they do
+    # Add checkbox that selects which potential to use to make the density plot
+    # Maybe check to make sure the delete button doesn't have a memory leak
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.potential_name = tk.StringVar(value = "Empty")
@@ -272,6 +276,8 @@ go_button.grid(column = 0, row = 20)
 
 #####################################################################################################
 # setting up the matplotlib canvas
+
+# TODO: see if the density subplot can be hidden/resummoned at will
 
 fig = Figure()
 
