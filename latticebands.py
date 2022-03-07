@@ -229,7 +229,7 @@ resolution_entry.grid(column = 0, row = 10)
 
 #####################################################################################################
 # setting up the go button and plotting function
-# TODO: look into move some of these algorithm details to their own function or maybe even module
+# TODO: look into moving some of these algorithm details to their own function or maybe even module
 
 def plot_bands():
     band_axes.clear()
