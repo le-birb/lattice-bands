@@ -151,7 +151,6 @@ class potential_entry(ttk.Frame):
     """
     # TODO list:
     # Add labels for most elements to explain what they do
-    # Add checkbox that selects which potential to use to make the density plot
     # Maybe check to make sure the delete button doesn't have a memory leak
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -182,6 +181,15 @@ class potential_entry(ttk.Frame):
         self.linealpha = IntString(value = "255", default = 255)
         self.alpha_entry = num_entry(self, textvariable = self.linealpha, width = 4)
         self.alpha_entry.grid(row = 1, column = 5)
+
+        self.is_density_checked = tk.BooleanVar(value = False)
+        self.density_check = ttk.Checkbutton(self, variable = self.is_density_checked, command = self.density_callback)
+        self.density_check.grid(row = 1, column = 10)
+
+    def density_callback(self):
+        for entry in potentials_to_plot:
+            if entry is not self:
+                entry.is_density_checked.set(False)
 
     def get_potential(self):
         return functools.partial(potential_map[self.potential_name.get()], scale = self.scale_var.get())
@@ -245,6 +253,8 @@ def plot_bands():
     path = np.array(list(chain.from_iterable(band_paths)))
     plot_space = np.array(list(chain.from_iterable(plot_ranges)))
 
+    density_energies = None
+
     for entry in potentials_to_plot:
         potential = entry.get_potential()
     
@@ -256,17 +266,19 @@ def plot_bands():
         for band in energy_bands:
             band_axes.plot(plot_space, band, **style_params)
 
+        if entry.is_density_checked.get():
+            density_energies = energy_bands
+
     band_axes.set_xlabel("High Symmetry Points")
     band_axes.set_xticks(list(range(len(lat.points))))
     band_axes.set_xticklabels(lat.point_names)
     band_axes.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
 
-    # TODO: see above in potential_entry
-    # plot_densities(energy_bands, density_axes)
+    if density_energies is not None:
+        plot_densities(density_energies, density_axes)
 
     density_axes.set_xlabel("Density")
     density_axes.set_xlim(left = 0)
-    # density_axes.axvline(0, color = "k", linewidth = .75)
 
     canvas.draw()
 
