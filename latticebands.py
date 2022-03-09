@@ -210,6 +210,7 @@ class potential_entry(ttk.Frame):
 
 # have something be plotted by default at least
 add_potential()
+potentials_to_plot[0].is_density_checked.set(True)
 
 #####################################################################################################
 # plot parameters - resolution and range
