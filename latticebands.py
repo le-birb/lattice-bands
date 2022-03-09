@@ -142,6 +142,7 @@ colors = \
     "darkblue",
     "darkgreen",
     "darkgray",
+    "rainbow",
 ]
 _max_color_width = max(len(k) for k in colors)
 
@@ -260,7 +261,8 @@ def plot_bands():
     
         style_params = {}
         style_params.update(linestyle = entry.get_line_style())
-        style_params.update(color = to_rgba(entry.get_line_color(), entry.get_line_alpha()))
+        if entry.get_line_color() != "rainbow":
+            style_params.update(color = to_rgba(entry.get_line_color(), entry.get_line_alpha()))
 
         energy_bands = central_equation.get_bands(path, potential, band_count)
         for band in energy_bands:
