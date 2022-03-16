@@ -29,6 +29,7 @@ class lattice:
             (np.cross(self._a1, self._a2)/self._direct_triple)[0:dimension]
         ])[0:dimension]*(2*pi)
         
+    # TODO: express path points in terms of reciprocal basis
     def get_paths(self, resolution: int) -> list[np.ndarray]:
         paths = []
         for start, end in _pairwise(self.points):
