@@ -8,14 +8,17 @@ import numpy as np
 
 def plot_densities(bands: list[np.ndarray], ax: Axes):
     energies = list(chain.from_iterable(bands))
+
+    minE = min(energies)
+    maxE = max(energies)
     
     # set up the list of bins, where each bin is "named" after its lower bound
-    bin_size = .5
+    bin_size = (maxE-minE)/50
 
     # TODO: pull out bin calculation to its own function?
     # the dividing and multiplying here is to round the bins down to the nearest integer multiple of bin_size
-    lowest_bin_value = floor( min(energies) / bin_size ) * bin_size
-    highest_bin_value = floor( max(energies) / bin_size ) * bin_size
+    lowest_bin_value = floor( minE / bin_size ) * bin_size
+    highest_bin_value = floor( maxE / bin_size ) * bin_size
 
     length = round((highest_bin_value - lowest_bin_value) / bin_size)
     bins = np.linspace(lowest_bin_value, highest_bin_value, length + 1) # use length + 1 as both endpoints are included in the linspace
