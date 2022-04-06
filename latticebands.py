@@ -155,49 +155,53 @@ class potential_entry(ttk.Frame):
     # Maybe check to make sure the delete button doesn't have a memory leak
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.separator = ttk.Separator(self, orient = "horizontal")
+        self.separator.grid(row = 0, column = 0, columnspan = 100, sticky = "EW", pady = (0, 5))
+
         self.potential_name = tk.StringVar(value = "Empty")
         self.potential_selector = ttk.Combobox(self, textvariable = self.potential_name, state = "readonly", values = list(potential_map.keys()), width = _max_pot_width)
         self.potential_selector.current(0)
-        self.potential_selector.grid(row = 0, column = 0, columnspan = 2)
+        self.potential_selector.grid(row = 1, column = 0, columnspan = 2)
 
         self.scale_label = ttk.Label(self, text = "Strength:")
-        self.scale_label.grid(row = 0, column = 2, columnspan = 2, sticky = "E", padx = (5, 0))
+        self.scale_label.grid(row = 1, column = 2, columnspan = 2, sticky = "E", padx = (5, 0))
 
         self.scale_var = IntString(value = "1", default = 1)
         self.scale_entry = num_entry(self, textvariable = self.scale_var, width = 4)
-        self.scale_entry.grid(row = 0, column = 4, columnspan = 2, sticky = "W", padx = (0, 5))
+        self.scale_entry.grid(row = 1, column = 4, columnspan = 2, sticky = "W", padx = (0, 5))
 
         self.del_btn = ttk.Button(self, command = self.remove, text = "Remove", width = 8)
-        self.del_btn.grid(row = 0, column = 10, sticky = "E")
+        self.del_btn.grid(row = 1, column = 10, sticky = "E")
 
         self.style_label = ttk.Label(self, text = "Style:")
-        self.style_label.grid(row = 1, column = 1, sticky = "W")
+        self.style_label.grid(row = 2, column = 1, sticky = "W")
 
         self.linestyle = tk.StringVar(value = "Solid")
         self.style_selector = ttk.Combobox(self, textvariable = self.linestyle, state = "readonly", values = list(line_styles_map.keys()), width = _max_line_width)
-        self.style_selector.grid(row = 2, column = 1)
+        self.style_selector.grid(row = 3, column = 1)
 
         self.color_label = ttk.Label(self, text = "Color:")
-        self.color_label.grid(row = 1, column = 3, sticky = "W")
+        self.color_label.grid(row = 2, column = 3, sticky = "W")
 
         self.linecolor = tk.StringVar(value = "black")
         self.color_selector = ttk.Combobox(self, textvariable = self.linecolor, state = "readonly", values = colors, width = _max_color_width)
-        self.color_selector.grid(row = 2, column = 3)
+        self.color_selector.grid(row = 3, column = 3)
 
         self.alpha_label = ttk.Label(self, text = "Alpha:")
-        self.alpha_label.grid(row = 1, column = 5, sticky = "W")
+        self.alpha_label.grid(row = 2, column = 5, sticky = "W")
 
         # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
         self.linealpha = IntString(value = "255", default = 255)
         self.alpha_entry = num_entry(self, textvariable = self.linealpha, width = 4)
-        self.alpha_entry.grid(row = 2, column = 5)
+        self.alpha_entry.grid(row = 3, column = 5)
 
         self.density_label = ttk.Label(self, text = "Check to make density of states plot:")
-        self.density_label.grid(row = 3, column = 0, columnspan = 9)
+        self.density_label.grid(row = 4, column = 0, columnspan = 9)
 
         self.is_density_checked = tk.BooleanVar(value = False)
         self.density_check = ttk.Checkbutton(self, variable = self.is_density_checked, command = self.density_callback)
-        self.density_check.grid(row = 3, column = 10)
+        self.density_check.grid(row = 4, column = 10)
 
     def density_callback(self):
         for entry in potentials_to_plot:
