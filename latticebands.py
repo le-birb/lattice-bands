@@ -170,22 +170,34 @@ class potential_entry(ttk.Frame):
         self.del_btn = ttk.Button(self, command = self.remove, text = "Remove", width = 8)
         self.del_btn.grid(row = 0, column = 10, sticky = "E")
 
+        self.style_label = ttk.Label(self, text = "Style:")
+        self.style_label.grid(row = 1, column = 1, sticky = "W")
+
         self.linestyle = tk.StringVar(value = "Solid")
         self.style_selector = ttk.Combobox(self, textvariable = self.linestyle, state = "readonly", values = list(line_styles_map.keys()), width = _max_line_width)
-        self.style_selector.grid(row = 1, column = 1)
+        self.style_selector.grid(row = 2, column = 1)
+
+        self.color_label = ttk.Label(self, text = "Color:")
+        self.color_label.grid(row = 1, column = 3, sticky = "W")
 
         self.linecolor = tk.StringVar(value = "black")
         self.color_selector = ttk.Combobox(self, textvariable = self.linecolor, state = "readonly", values = colors, width = _max_color_width)
-        self.color_selector.grid(row = 1, column = 3)
+        self.color_selector.grid(row = 2, column = 3)
+
+        self.alpha_label = ttk.Label(self, text = "Alpha:")
+        self.alpha_label.grid(row = 1, column = 5, sticky = "W")
 
         # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
         self.linealpha = IntString(value = "255", default = 255)
         self.alpha_entry = num_entry(self, textvariable = self.linealpha, width = 4)
-        self.alpha_entry.grid(row = 1, column = 5)
+        self.alpha_entry.grid(row = 2, column = 5)
+
+        self.density_label = ttk.Label(self, text = "Check to make density of states plot:")
+        self.density_label.grid(row = 3, column = 0, columnspan = 9)
 
         self.is_density_checked = tk.BooleanVar(value = False)
         self.density_check = ttk.Checkbutton(self, variable = self.is_density_checked, command = self.density_callback)
-        self.density_check.grid(row = 1, column = 10)
+        self.density_check.grid(row = 3, column = 10)
 
     def density_callback(self):
         for entry in potentials_to_plot:
