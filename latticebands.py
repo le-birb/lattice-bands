@@ -116,7 +116,7 @@ add_potential_buton.pack(anchor = "n", pady = (0, 10))
 
 potential_map = \
 {
-    "Empty": potentials.empty_v,
+    "Empty lattice": potentials.empty_v,
     "Simple": potentials.simple_v,
     "Quadratic": potentials.typical_v,
 }
@@ -159,45 +159,48 @@ class potential_entry(ttk.Frame):
         self.separator = ttk.Separator(self, orient = "horizontal")
         self.separator.grid(row = 0, column = 0, columnspan = 100, sticky = "EW", pady = (0, 5))
 
-        self.potential_name = tk.StringVar(value = "Empty")
+        self.approximation_label = ttk.Label(self, text = "Select approximation:")
+        self.approximation_label.grid(row = 1, column = 0, columnspan = 2, sticky = "W")
+
+        self.potential_name = tk.StringVar(value = "Empty lattice")
         self.potential_selector = ttk.Combobox(self, textvariable = self.potential_name, state = "readonly", values = list(potential_map.keys()), width = _max_pot_width)
         self.potential_selector.current(0)
-        self.potential_selector.grid(row = 1, column = 0, columnspan = 2)
+        self.potential_selector.grid(row = 1, column = 2, columnspan = 3, padx = 5, sticky = "W")
 
-        self.scale_label = ttk.Label(self, text = "Strength:")
-        self.scale_label.grid(row = 1, column = 2, columnspan = 2, sticky = "E", padx = (5, 0))
+        # self.scale_label = ttk.Label(self, text = "Strength:")
+        # self.scale_label.grid(row = 1, column = 2, columnspan = 2, sticky = "E", padx = (5, 0))
 
         self.scale_var = IntString(value = "1", default = 1)
-        self.scale_entry = num_entry(self, textvariable = self.scale_var, width = 4)
-        self.scale_entry.grid(row = 1, column = 4, columnspan = 2, sticky = "W", padx = (0, 5))
+        # self.scale_entry = num_entry(self, textvariable = self.scale_var, width = 4)
+        # self.scale_entry.grid(row = 1, column = 4, columnspan = 2, sticky = "W", padx = (0, 5))
 
         self.del_btn = ttk.Button(self, command = self.remove, text = "Remove", width = 8)
         self.del_btn.grid(row = 1, column = 10, sticky = "E")
 
-        self.style_label = ttk.Label(self, text = "Style:")
-        self.style_label.grid(row = 2, column = 1, sticky = "W")
+        self.style_label = ttk.Label(self, text = "Line style:")
+        self.style_label.grid(row = 2, column = 0, sticky = "W")
 
         self.linestyle = tk.StringVar(value = "Solid")
         self.style_selector = ttk.Combobox(self, textvariable = self.linestyle, state = "readonly", values = list(line_styles_map.keys()), width = _max_line_width)
-        self.style_selector.grid(row = 3, column = 1)
+        self.style_selector.grid(row = 3, column = 0, sticky = "W")
 
         self.color_label = ttk.Label(self, text = "Color:")
-        self.color_label.grid(row = 2, column = 3, sticky = "W")
+        self.color_label.grid(row = 2, column = 1, sticky = "W", columnspan = 2)
 
         self.linecolor = tk.StringVar(value = "black")
         self.color_selector = ttk.Combobox(self, textvariable = self.linecolor, state = "readonly", values = colors, width = _max_color_width)
-        self.color_selector.grid(row = 3, column = 3)
+        self.color_selector.grid(row = 3, column = 1, columnspan = 2, sticky = "W")
 
-        self.alpha_label = ttk.Label(self, text = "Alpha:")
-        self.alpha_label.grid(row = 2, column = 5, sticky = "W")
+        self.alpha_label = ttk.Label(self, text = "Opacity:")
+        self.alpha_label.grid(row = 2, column = 4, sticky = "W")
 
         # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
         self.linealpha = IntString(value = "255", default = 255)
         self.alpha_entry = num_entry(self, textvariable = self.linealpha, width = 4)
-        self.alpha_entry.grid(row = 3, column = 5)
+        self.alpha_entry.grid(row = 3, column = 4, sticky = "W")
 
         self.density_label = ttk.Label(self, text = "Check to make density of states plot:")
-        self.density_label.grid(row = 4, column = 0, columnspan = 9)
+        self.density_label.grid(row = 4, column = 0, columnspan = 4)
 
         self.is_density_checked = tk.BooleanVar(value = False)
         self.density_check = ttk.Checkbutton(self, variable = self.is_density_checked, command = self.density_callback)
