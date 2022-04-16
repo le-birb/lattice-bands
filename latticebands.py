@@ -207,7 +207,7 @@ class potential_entry(ttk.Frame):
         # self.scale_label = ttk.Label(self, text = "Strength:")
         # self.scale_label.grid(row = 1, column = 2, columnspan = 2, sticky = "E", padx = (5, 0))
 
-        self.scale_var = IntString(value = "1", default = 1)
+        self.scale_var = FloatString(value = "1", default = 1)
         # self.scale_entry = num_entry(self, textvariable = self.scale_var, width = 4)
         # self.scale_entry.grid(row = 1, column = 4, columnspan = 2, sticky = "W", padx = (0, 5))
 
@@ -232,8 +232,8 @@ class potential_entry(ttk.Frame):
         self.alpha_label.grid(row = 2, column = 4, sticky = "W")
 
         # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
-        self.linealpha = IntString(value = "255", default = 255)
-        self.alpha_entry = int_entry(self, textvariable = self.linealpha, width = 4)
+        self.linealpha = FloatString(value = "1", default = 1)
+        self.alpha_entry = float_entry(self, textvariable = self.linealpha, width = 4)
         self.alpha_entry.grid(row = 3, column = 4, sticky = "W")
 
         self.density_label = ttk.Label(self, text = "Check to make density of states plot:")
@@ -258,7 +258,7 @@ class potential_entry(ttk.Frame):
         return self.linecolor.get()
 
     def get_line_alpha(self):
-        return self.linealpha.get() / 255
+        return self.linealpha.get()
 
     def remove(self):
         self.pack_forget()
