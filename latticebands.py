@@ -71,12 +71,13 @@ file_menu.grid(column = 0, row = 1, sticky = "N", pady = (0, 20))
 #####################################################################################################
 # define number entry boxes
 
-def _validate_num(text: str):
+# fails for negative values
+def _validate_int(text: str):
     return text.isdigit() or text == ""
 
 class IntString(tk.StringVar):
     """
-    Wrapper for tk.StringVar for use with num_entry.
+    Wrapper for tk.StringVar for use with int_entry.
     Allows entry as a string but ensures and integer value.
     """
     def __init__(self, *args, default: int = 0, **kwargs):
@@ -90,13 +91,49 @@ class IntString(tk.StringVar):
         else:
             return int(tempval)
 
-class num_entry(ttk.Entry):
+class int_entry(ttk.Entry):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        validator = self.register(_validate_num)
+        validator = self.register(_validate_int)
         # this is the incantaion I found to make text validation work
         self.config(validate = "key", validatecommand = (validator, '%P'))
 
+
+def _validate_float(text: str):
+    # try to split at a decimal point
+    match text.split("."):
+        # if there isn't a decimal point, it should be an integer
+        case [integer]:
+            return _validate_int(integer)
+        # if there is, both before and after the decimal point should "look like" integers
+        case [integer, fraction]:
+            return _validate_int(integer) and _validate_int(fraction)
+        # otherwise (more than one '.'), fail
+        case _:
+            return False
+            
+class FloatString(tk.StringVar):
+    """
+    Wrapper for tk.StringVar for use with float_entry.
+    Allows entry of a string but ensures a float value.
+    """
+    def __init__(self, *args, default: float = 1, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._default = default
+
+    def get(self) -> float:
+        tempval = super().get()
+        if tempval == "":
+            return self._default
+        else:
+            return float(tempval)
+
+class float_entry(ttk.Entry):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        validator = self.register(_validate_float)
+        # this is the incantaion I found to make text validation work
+        self.config(validate = "key", validatecommand = (validator, '%P'))
 
 #####################################################################################################
 # potential selector
@@ -196,7 +233,7 @@ class potential_entry(ttk.Frame):
 
         # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
         self.linealpha = IntString(value = "255", default = 255)
-        self.alpha_entry = num_entry(self, textvariable = self.linealpha, width = 4)
+        self.alpha_entry = int_entry(self, textvariable = self.linealpha, width = 4)
         self.alpha_entry.grid(row = 3, column = 4, sticky = "W")
 
         self.density_label = ttk.Label(self, text = "Check to make density of states plot:")
@@ -238,14 +275,14 @@ range_label = ttk.Label(interfaceframe, text = "Number of bands to plot:")
 range_label.grid(column = 0, row = 7)
 
 range_var = IntString(value = "9", default = 9)
-range_entry = num_entry(interfaceframe, textvariable = range_var)
+range_entry = int_entry(interfaceframe, textvariable = range_var)
 range_entry.grid(column = 0, row = 8)
 
 resolution_label = ttk.Label(interfaceframe, text = "Resolution of plot (sample rate between symmetry points):", wraplength = 150)
 resolution_label.grid(column = 0, row = 9)
 
 resolution_var = IntString(value = "50", default = 50)
-resolution_entry = num_entry(interfaceframe, textvariable = resolution_var)
+resolution_entry = int_entry(interfaceframe, textvariable = resolution_var)
 resolution_entry.grid(column = 0, row = 10)
 
 
