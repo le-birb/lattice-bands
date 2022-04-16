@@ -17,36 +17,34 @@ a = 1
 direct_basis = \
 [   
     [a, 0, 0],
-    [0, a, 0],
+    [-a/2, a*sqrt(3)/2, 0],
     [0, 0, 1] 
 ]
 
 points = \
 [
     (0,0,0),
-    (pi/(2*a), 0,0),
-    (pi/a, 0, 0),
-    (pi/a, pi/(2*a), 0),
-    (pi/a, pi/a, 0),
-    (pi/(2*a), pi/(2*a), 0),
+    (1/6, 1/6, 0),
+    (1/3, 1/3, 0),
+    (0, .5, 0),
+    (0, .25, 0),
     (0,0,0)
 ]
 
 point_names = \
 [
-    "$\Gamma$", 
-    "$\Delta$", 
-    "X", 
-    "Z", 
-    "M", 
-    "$\Sigma$", 
+    "$\Gamma$",
+    "T",
+    "K",
+    "M",
+    "$\Sigma$",
     "$\Gamma$"
 ]
 
-boundary_points = [0, 2, 4, 6]
+boundary_points = [0, 2, 3, 5]
 
 dim = 2
 
-with open("lattices/2d_square.json", "w") as out:
+with open("lattices/2d_hexagonal.json", "w") as out:
     json.dump(lattice(direct_basis, points, point_names, boundary_points, dim).__dict__, out, indent = 4)
 
