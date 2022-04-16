@@ -1,4 +1,5 @@
 
+# from functools import lru_cache
 from itertools import tee
 import numpy as np
 from math import pi
@@ -18,7 +19,7 @@ class lattice:
         self._a1, self._a2, self._a3 = self.basis
         self._direct_triple = _triple_product(*self.basis)
         
-        self.points = list(points)
+        self.points = list(point[0:dimension] for point in points)
         self.point_names = list(point_names)
         self.vertical_lines = list(vertical_lines)
         
@@ -28,10 +29,14 @@ class lattice:
             (np.cross(self._a3, self._a1)/self._direct_triple)[0:dimension],
             (np.cross(self._a1, self._a2)/self._direct_triple)[0:dimension]
         ])[0:dimension]*(2*pi)
-        
-    # TODO: express path points in terms of reciprocal basis
+
+    # @lru_cache(1)
     def get_paths(self, resolution: int) -> list[np.ndarray]:
         paths = []
         for start, end in _pairwise(self.points):
-            paths.append(np.linspace(start, end, resolution))
+            start, end = np.array(start), np.array(end)
+            # points are given using the reciprocal basis, so we need to transform them to our "k" basis
+            start_scaled = np.transpose(self.reciprocal_basis) @ start
+            end_scaled   = np.transpose(self.reciprocal_basis) @ end
+            paths.append(np.linspace(start_scaled, end_scaled, resolution))
         return paths
