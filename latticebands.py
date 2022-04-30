@@ -5,8 +5,8 @@ from itertools import chain
 
 import tkinter as tk
 from tkinter import ttk
+from tkinter.filedialog import asksaveasfilename
 import os
-from typing import Callable
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -18,7 +18,6 @@ import numpy as np
 
 from json_interface import load_lattice
 import central_equation
-
 import potentials
 from density import plot_densities
 
@@ -42,7 +41,7 @@ interfaceframe = ttk.Frame(mainframe, padding = 10)
 interfaceframe.grid(column = 1, row = 0, sticky = "NESW")
 # interfaceframe.rowconfigure(0, weight = 1)
 # interfaceframe.rowconfigure(1, weight = 1)
-interfaceframe.rowconfigure(2, weight = 2)
+interfaceframe.rowconfigure(5, weight = 2)
 
 
 
@@ -50,7 +49,7 @@ interfaceframe.rowconfigure(2, weight = 2)
 # lattice selector
 
 lattice_label = ttk.Label(interfaceframe, text = "Select lattice to use:")
-lattice_label.grid(column = 0, row = 0, sticky = "S")
+lattice_label.grid(column = 0, row = 0, sticky = "S", columnspan = 2)
 
 files: list[str] = os.listdir("lattices")
 json_files = []
@@ -63,7 +62,7 @@ for filename in files:
 lattice = tk.StringVar()
 lattice.set("2d_square")
 file_menu = ttk.OptionMenu(interfaceframe, lattice, lattice.get(), *json_files)
-file_menu.grid(column = 0, row = 1, sticky = "N", pady = (0, 20))
+file_menu.grid(column = 0, row = 1, sticky = "N", pady = (0, 20), columnspan = 2)
 
 
 
@@ -139,7 +138,7 @@ class float_entry(ttk.Entry):
 # potential selector
 
 potential_frame = ttk.Frame(interfaceframe)
-potential_frame.grid(column = 0, row = 2, sticky = "N")
+potential_frame.grid(column = 0, row = 5, sticky = "N", columnspan = 2)
 
 potentials_to_plot: list[potential_entry] = []
 
@@ -148,8 +147,17 @@ def add_potential():
     new_pot.pack(pady = (0, 10))
     potentials_to_plot.append(new_pot)
 
-add_potential_buton = ttk.Button(potential_frame, text = "Add potential to plot", command = add_potential)
-add_potential_buton.pack(anchor = "n", pady = (0, 10))
+add_potential_buton = ttk.Button(interfaceframe, text = "Add potential to plot", command = add_potential)
+add_potential_buton.grid(column = 0, row = 2, columnspan = 2, sticky = "N", pady = (0, 10))
+
+
+strength_label = ttk.Label(interfaceframe, text = "Potential strength:")
+strength_label.grid(column = 0, row = 3, sticky = "E")
+
+strength = FloatString(value = "1")
+strength_entry = float_entry(interfaceframe, textvariable = strength, width = 4)
+strength_entry.grid(column = 1, row = 3, sticky = "W", padx = (10, 0), pady = (0, 10))
+
 
 potential_map = \
 {
@@ -249,7 +257,7 @@ class potential_entry(ttk.Frame):
                 entry.is_density_checked.set(False)
 
     def get_potential(self):
-        return functools.partial(potential_map[self.potential_name.get()], scale = self.scale_var.get())
+        return functools.partial(potential_map[self.potential_name.get()], scale = strength.get())
 
     def get_line_style(self):
         return line_styles_map[self.linestyle.get()]
@@ -272,18 +280,18 @@ potentials_to_plot[0].is_density_checked.set(True)
 # plot parameters - resolution and range
 
 range_label = ttk.Label(interfaceframe, text = "Number of bands to plot:")
-range_label.grid(column = 0, row = 7)
+range_label.grid(column = 0, row = 7, columnspan = 20)
 
 range_var = IntString(value = "9", default = 9)
 range_entry = int_entry(interfaceframe, textvariable = range_var)
-range_entry.grid(column = 0, row = 8)
+range_entry.grid(column = 0, row = 8, columnspan = 20)
 
 resolution_label = ttk.Label(interfaceframe, text = "Resolution of plot (sample rate between symmetry points):", wraplength = 150)
-resolution_label.grid(column = 0, row = 9)
+resolution_label.grid(column = 0, row = 9, columnspan = 20)
 
 resolution_var = IntString(value = "50", default = 50)
 resolution_entry = int_entry(interfaceframe, textvariable = resolution_var)
-resolution_entry.grid(column = 0, row = 10)
+resolution_entry.grid(column = 0, row = 10, columnspan = 20)
 
 
 #####################################################################################################
@@ -345,7 +353,7 @@ def plot_bands():
     canvas.draw()
 
 go_button = ttk.Button(interfaceframe, text = "Plot bands", command = plot_bands)
-go_button.grid(column = 0, row = 20)
+go_button.grid(column = 0, row = 20, columnspan = 20)
 
 
 def print_plot():
@@ -353,7 +361,7 @@ def print_plot():
     canvas.print_png(figure_name)
     
 print_button = ttk.Button(interfaceframe, text = "Export Plot as png", command = print_plot)
-print_button.grid(column = 0, row = 21)
+print_button.grid(column = 0, row = 21, columnspan = 20)
 
 
 #####################################################################################################
