@@ -348,6 +348,12 @@ go_button = ttk.Button(interfaceframe, text = "Plot bands", command = plot_bands
 go_button.grid(column = 0, row = 20)
 
 
+def print_plot():
+    figure_name = asksaveasfilename(initialdir = "figures", defaultextension = ".png")
+    canvas.print_png(figure_name)
+    
+print_button = ttk.Button(interfaceframe, text = "Export Plot as png", command = print_plot)
+print_button.grid(column = 0, row = 21)
 
 
 #####################################################################################################
