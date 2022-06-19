@@ -80,7 +80,7 @@ class IntString(tk.StringVar):
     Allows entry as a string but ensures and integer value.
     """
     def __init__(self, *args, default: int = 0, **kwargs):
-        super().__init__(*args, **kwargs)
+        tk.StringVar.__init__(self, *args, **kwargs)
         self._default = default
 
     def get(self) -> int:
@@ -92,7 +92,7 @@ class IntString(tk.StringVar):
 
 class int_entry(ttk.Entry):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        ttk.Entry.__init__(self, *args, **kwargs)
         validator = self.register(_validate_int)
         # this is the incantaion I found to make text validation work
         self.config(validate = "key", validatecommand = (validator, '%P'))
@@ -117,7 +117,7 @@ class FloatString(tk.StringVar):
     Allows entry of a string but ensures a float value.
     """
     def __init__(self, *args, default: float = 1, **kwargs):
-        super().__init__(*args, **kwargs)
+        tk.StringVar.__init__(self, *args, **kwargs)
         self._default = default
 
     def get(self) -> float:
@@ -129,7 +129,7 @@ class FloatString(tk.StringVar):
 
 class float_entry(ttk.Entry):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        ttk.Entry.__init__(self, *args, **kwargs)
         validator = self.register(_validate_float)
         # this is the incantaion I found to make text validation work
         self.config(validate = "key", validatecommand = (validator, '%P'))
@@ -200,7 +200,7 @@ class potential_entry(ttk.Frame):
     # Add labels for most elements to explain what they do
     # Maybe check to make sure the delete button doesn't have a memory leak
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        ttk.Frame.__init__(self, *args, **kwargs)
 
         self.separator = ttk.Separator(self, orient = "horizontal")
         self.separator.grid(row = 0, column = 0, columnspan = 100, sticky = "EW", pady = (0, 5))
