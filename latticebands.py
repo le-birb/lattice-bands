@@ -230,14 +230,14 @@ class potential_entry(ttk.Frame):
         self.style_selector = ttk.Combobox(self, textvariable = self.linestyle, state = "readonly", values = list(line_styles_map.keys()), width = _max_line_width)
         self.style_selector.grid(row = 3, column = 0, sticky = "W")
 
-        self.color_label = ttk.Label(self, text = "Color:")
+        self.color_label = ttk.Label(self, text = "Line color:")
         self.color_label.grid(row = 2, column = 1, sticky = "W", columnspan = 2)
 
         self.linecolor = tk.StringVar(value = "black")
         self.color_selector = ttk.Combobox(self, textvariable = self.linecolor, state = "readonly", values = colors, width = _max_color_width)
         self.color_selector.grid(row = 3, column = 1, columnspan = 2, sticky = "W")
 
-        self.alpha_label = ttk.Label(self, text = "Opacity:")
+        self.alpha_label = ttk.Label(self, text = "Line opacity:")
         self.alpha_label.grid(row = 2, column = 4, sticky = "W")
 
         # use a 0-255 range to leverage existing code for integer handling, but convert to 0-1 later
