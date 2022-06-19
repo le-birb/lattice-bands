@@ -354,7 +354,7 @@ def plot_bands():
     canvas.draw()
 
 go_button = ttk.Button(interfaceframe, text = "Plot bands", command = plot_bands)
-go_button.grid(column = 0, row = 20, columnspan = 20)
+go_button.grid(column = 0, row = 20, columnspan = 20, pady = 10)
 
 
 def print_plot():
