@@ -140,6 +140,15 @@ class float_entry(ttk.Entry):
 potential_frame = ttk.Frame(interfaceframe)
 potential_frame.grid(column = 0, row = 5, sticky = "N", columnspan = 2)
 
+
+strength_label = ttk.Label(interfaceframe, text = "Potential strength:")
+strength_label.grid(column = 0, row = 2, sticky = "E")
+
+strength = FloatString(value = "1")
+strength_entry = float_entry(interfaceframe, textvariable = strength, width = 4)
+strength_entry.grid(column = 1, row = 2, sticky = "W", padx = (10, 0), pady = (0, 10))
+
+
 potentials_to_plot: list[potential_entry] = []
 
 def add_potential():
@@ -148,15 +157,7 @@ def add_potential():
     potentials_to_plot.append(new_pot)
 
 add_potential_buton = ttk.Button(interfaceframe, text = "Add potential to plot", command = add_potential)
-add_potential_buton.grid(column = 0, row = 2, columnspan = 2, sticky = "N", pady = (0, 10))
-
-
-strength_label = ttk.Label(interfaceframe, text = "Potential strength:")
-strength_label.grid(column = 0, row = 3, sticky = "E")
-
-strength = FloatString(value = "1")
-strength_entry = float_entry(interfaceframe, textvariable = strength, width = 4)
-strength_entry.grid(column = 1, row = 3, sticky = "W", padx = (10, 0), pady = (0, 10))
+add_potential_buton.grid(column = 0, row = 3, columnspan = 2, sticky = "N", pady = (0, 10))
 
 
 potential_map = \
