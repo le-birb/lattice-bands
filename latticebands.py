@@ -26,13 +26,35 @@ matplotlib.use("TkAgg")
 
 
 #####################################################################################################
+# define a tooltip widget for use throughout the gui
+
+class tooltip(ttk.Label):
+    """Tkinter widget for adding hover-over tooltips to other widgets."""
+    def __init__(self, target: ttk.Widget, **kwargs):
+        ttk.Label.__init__(self, root, **kwargs)
+        self.target = target
+        target.bind('<Enter>', self.show)
+        target.bind('<Leave>', self.hide)
+
+    def show(self, e: tk.Event):
+        # enter event coordinates are relative to the widget being entered
+        # thus, we add its "global" position to compensate
+        offset_x = self.target.winfo_x()
+        offset_y = self.target.winfo_y()
+        self.place(x = e.x + offset_x, y = e.y + offset_y)
+
+    def hide(self, _: tk.Event):
+        self.place_forget()
+
+#####################################################################################################
 # set up whole window
 
 root = tk.Tk()
 root.title("Lattice Bands")
+root.geometry("1000x600")
 
 mainframe = ttk.Frame(root, padding = "12")
-mainframe.grid(column = 0, row = 0, sticky = "NESW")
+mainframe.place(relx = 0, rely = 0, relheight = 1, relwidth = 1)
 root.columnconfigure(0, weight = 2)
 # root.columnconfigure(1, weight = 1)
 root.rowconfigure(0, weight = 1)
@@ -280,15 +302,28 @@ potentials_to_plot[0].is_density_checked.set(True)
 #####################################################################################################
 # plot parameters - resolution and range
 
+size_label = ttk.Label(interfaceframe, text = "Size of matrix to use:")
+size_label.grid(column = 0, row = 5, columnspan = 20, sticky = "S")
+
+size_tip = tooltip(size_label, text = "The size of the square matrix that will be used to compute the bands. Higher is \"better\" but much slower.")
+
+size_var = IntString(value = "9", default = 9)
+size_entry = int_entry(interfaceframe, textvariable = size_var)
+size_entry.grid(column = 0, row = 6, columnspan = 20)
+
 range_label = ttk.Label(interfaceframe, text = "Number of bands to plot:")
 range_label.grid(column = 0, row = 7, columnspan = 20)
+
+range_tip = tooltip(range_label, text = "The number of bands to plot. The actual number plotted will never be more than the matrix size.")
 
 range_var = IntString(value = "9", default = 9)
 range_entry = int_entry(interfaceframe, textvariable = range_var)
 range_entry.grid(column = 0, row = 8, columnspan = 20)
 
-resolution_label = ttk.Label(interfaceframe, text = "Resolution of plot (sample rate between symmetry points):", wraplength = 150)
+resolution_label = ttk.Label(interfaceframe, text = "Resolution of plot:", wraplength = 150)
 resolution_label.grid(column = 0, row = 9, columnspan = 20)
+
+resolution_tip = tooltip(resolution_label, text = "The number of samples between symmetry points. Higher is smoother but slower.")
 
 resolution_var = IntString(value = "50", default = 50)
 resolution_entry = int_entry(interfaceframe, textvariable = resolution_var)
