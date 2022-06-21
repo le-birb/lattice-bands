@@ -34,7 +34,8 @@ class tooltip(ttk.Label):
         ttk.Label.__init__(self, root, **kwargs)
         self.target = target
         target.bind('<Enter>', self.show)
-        target.bind('<Leave>', self.hide)
+        target.bind('<Leave>', self.on_leave_target)
+        self.bind('<Leave>', self.on_leave_self)
 
     def show(self, e: tk.Event):
         # enter event coordinates are relative to the widget being entered
@@ -43,7 +44,21 @@ class tooltip(ttk.Label):
         offset_y = self.target.winfo_y()
         self.place(x = e.x + offset_x, y = e.y + offset_y)
 
-    def hide(self, _: tk.Event):
+    def on_leave_self(self, e: tk.Event):
+        x, y = root.winfo_pointerxy()
+        widget_under_mouse = root.winfo_containing(x, y)
+        print(widget_under_mouse)
+        if widget_under_mouse is not self.target:
+            self.hide()
+
+    def on_leave_target(self, e: tk.Event):
+        x, y = root.winfo_pointerxy()
+        widget_under_mouse = root.winfo_containing(x, y)
+        print(widget_under_mouse)
+        if widget_under_mouse is not self:
+            self.hide()
+
+    def hide(self):
         self.place_forget()
 
 #####################################################################################################
