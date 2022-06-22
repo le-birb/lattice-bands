@@ -4,7 +4,7 @@ import functools
 from itertools import chain
 
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, SE
 from tkinter.filedialog import asksaveasfilename
 import os
 
@@ -31,7 +31,7 @@ matplotlib.use("TkAgg")
 class tooltip(ttk.Label):
     """Tkinter widget for adding hover-over tooltips to other widgets."""
     def __init__(self, target: ttk.Widget, **kwargs):
-        ttk.Label.__init__(self, root, **kwargs)
+        ttk.Label.__init__(self, root, **kwargs, wraplength = 100)
         self.target = target
         target.bind('<Enter>', self.show)
         target.bind('<Leave>', self.on_leave_target)
@@ -40,21 +40,21 @@ class tooltip(ttk.Label):
     def show(self, e: tk.Event):
         # enter event coordinates are relative to the widget being entered
         # thus, we add its "global" position to compensate
-        offset_x = self.target.winfo_x()
-        offset_y = self.target.winfo_y()
-        self.place(x = e.x + offset_x, y = e.y + offset_y)
+        # winfo_rootx and y give screen space coordinates, so must subtract window position
+        # winfo_x and y give coordinates relative to parent
+        offset_x = self.target.winfo_rootx() - root.winfo_rootx()
+        offset_y = self.target.winfo_rooty() - root.winfo_rooty()
+        self.place(x = e.x + offset_x, y = e.y + offset_y, anchor = SE)
 
     def on_leave_self(self, e: tk.Event):
         x, y = root.winfo_pointerxy()
         widget_under_mouse = root.winfo_containing(x, y)
-        print(widget_under_mouse)
         if widget_under_mouse is not self.target:
             self.hide()
 
     def on_leave_target(self, e: tk.Event):
         x, y = root.winfo_pointerxy()
         widget_under_mouse = root.winfo_containing(x, y)
-        print(widget_under_mouse)
         if widget_under_mouse is not self:
             self.hide()
 
