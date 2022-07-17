@@ -317,23 +317,23 @@ potentials_to_plot[0].is_density_checked.set(True)
 #####################################################################################################
 # plot parameters - resolution and range
 
-size_label = ttk.Label(interfaceframe, text = "Size of matrix to use:")
-size_label.grid(column = 0, row = 5, columnspan = 20, sticky = "S")
+matrix_size_label = ttk.Label(interfaceframe, text = "Size of matrix to use:")
+matrix_size_label.grid(column = 0, row = 5, columnspan = 20, sticky = "S")
 
-size_tip = tooltip(size_label, text = "The size of the square matrix that will be used to compute the bands. Higher is \"better\" but much slower.")
+matrix_size_tip = tooltip(matrix_size_label, text = "The size of the square matrix that will be used to compute the bands. Higher is \"better\" but much slower.")
 
-size_var = IntString(value = "9", default = 9)
-size_entry = int_entry(interfaceframe, textvariable = size_var)
-size_entry.grid(column = 0, row = 6, columnspan = 20)
+matrix_size_var = IntString(value = "9", default = 9)
+matrix_size_entry = int_entry(interfaceframe, textvariable = matrix_size_var)
+matrix_size_entry.grid(column = 0, row = 6, columnspan = 20)
 
-range_label = ttk.Label(interfaceframe, text = "Number of bands to plot:")
-range_label.grid(column = 0, row = 7, columnspan = 20)
+band_count_label = ttk.Label(interfaceframe, text = "Number of bands to plot:")
+band_count_label.grid(column = 0, row = 7, columnspan = 20)
 
-range_tip = tooltip(range_label, text = "The number of bands to plot. The actual number plotted will never be more than the matrix size.")
+band_count_tip = tooltip(band_count_label, text = "The number of bands to plot. The actual number plotted will never be more than the matrix size.")
 
-range_var = IntString(value = "9", default = 9)
-range_entry = int_entry(interfaceframe, textvariable = range_var)
-range_entry.grid(column = 0, row = 8, columnspan = 20)
+band_count_var = IntString(value = "9", default = 9)
+band_count_entry = int_entry(interfaceframe, textvariable = band_count_var)
+band_count_entry.grid(column = 0, row = 8, columnspan = 20)
 
 resolution_label = ttk.Label(interfaceframe, text = "Resolution of plot:", wraplength = 150)
 resolution_label.grid(column = 0, row = 9, columnspan = 20)
@@ -359,7 +359,7 @@ def plot_bands():
     for point in lat.vertical_lines:
         band_axes.axvline(point, linestyle = "--", color = (.5, .5, .5, .5))
 
-    band_count = range_var.get()
+    band_count = band_count_var.get()
     resolution = resolution_var.get()
 
     band_paths = lat.get_paths(resolution)
