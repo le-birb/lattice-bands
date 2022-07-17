@@ -17,11 +17,11 @@ from potentials import *
 np.set_printoptions(linewidth = 100000)
 
 
-def get_energies(k, band_count, fourier_coefficients: Callable):
+def get_energies(k, matrix_size, fourier_coefficients: Callable):
     # temporarily set to 1, here to change later if it matters
     l = 1
 
-    matrix = np.zeros((band_count, band_count))
+    matrix = np.zeros((matrix_size, matrix_size))
 
     for row, column in np.ndindex(matrix.shape):
         # with vector indices, the (a,b)th entry in the matrix is U[a-b], remembering that a and b are vectors

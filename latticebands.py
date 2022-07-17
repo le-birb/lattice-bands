@@ -359,7 +359,7 @@ def plot_bands():
     for point in lat.vertical_lines:
         band_axes.axvline(point, linestyle = "--", color = (.5, .5, .5, .5))
 
-    band_count = band_count_var.get()
+    matrix_size = matrix_size_var.get()
     resolution = resolution_var.get()
 
     band_paths = lat.get_paths(resolution)
@@ -380,7 +380,7 @@ def plot_bands():
         if entry.get_line_color() != "rainbow":
             style_params.update(color = to_rgba(entry.get_line_color(), entry.get_line_alpha()))
 
-        energy_bands = central_equation.get_bands(path, potential, band_count)
+        energy_bands = central_equation.get_bands(path, potential, matrix_size) [:band_count_var.get()]
         for band in energy_bands:
             band_axes.plot(plot_space, band, **style_params)
 
