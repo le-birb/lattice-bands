@@ -16,35 +16,33 @@ class lattice:
 a = 1
 direct_basis = \
 [   
-    [a, 0, 0],
-    [-a/2, a*sqrt(3)/2, 0],
-    [0, 0, 1] 
+    [a, a, 0],
+    [a, 0, a],
+    [0, a, a] 
 ]
 
 points = \
 [
     (0,0,0),
-    (1/6, 1/6, 0),
-    (1/3, 1/3, 0),
-    (0, .5, 0),
-    (0, .25, 0),
-    (0,0,0)
+    (1/2, 1/2, 1/2),
+    (1/2, 1/2, 0),
+    (2/sqrt(6), 1/sqrt(6), 1/sqrt(6)),
+    (0,0,0),
 ]
 
 point_names = \
 [
     "$\Gamma$",
-    "T",
+    "L",
+    "X",
     "K",
-    "M",
-    "$\Sigma$",
-    "$\Gamma$"
+    "$\Gamma$",
 ]
 
 boundary_points = [0, 2, 3, 5]
 
 dim = 2
 
-with open("lattices/2d_hexagonal.json", "w") as out:
+with open("lattices/3d_FCC.json", "w") as out:
     json.dump(lattice(direct_basis, points, point_names, boundary_points, dim).__dict__, out, indent = 4)
 
