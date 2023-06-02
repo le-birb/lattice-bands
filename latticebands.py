@@ -387,10 +387,10 @@ def plot_bands():
         if entry.is_density_checked.get():
             density_energies = energy_bands
 
-    band_axes.set_xlabel("High Symmetry Points")
+    band_axes.set_xlabel("High Symmetry Points", fontsize = "xx-large")
     band_axes.set_xticks(list(range(len(lat.points))))
     band_axes.set_xticklabels(lat.point_names)
-    band_axes.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$")
+    band_axes.set_ylabel(r"Energy, in units of $\frac{ħ^2}{2m}(\frac{π}{a})^2$", fontsize = "xx-large")
 
     band_axes.relim()
     band_axes.autoscale()
@@ -398,8 +398,8 @@ def plot_bands():
     if density_energies is not None:
         plot_densities(density_energies, density_axes)
 
-    density_axes.set_xlabel("Density")
-    density_axes.set_xlim(left = 0)
+        density_axes.set_xlabel("Density", fontsize = "xx-large")
+        density_axes.set_xlim(left = 0)
 
     canvas.draw()
 
