@@ -400,6 +400,9 @@ def plot_bands():
 
         density_axes.set_xlabel("Density", fontsize = "xx-large")
         density_axes.set_xlim(left = 0)
+        density_axes.set_visible(True)
+    else:
+        density_axes.set_visible(False)
 
     canvas.draw()
 
